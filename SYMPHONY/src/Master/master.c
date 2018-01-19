@@ -95,12 +95,12 @@ sym_environment *sym_open_environment()
 #endif
 
    setvbuf(stdout, (char *)NULL, _IOLBF, 2);
-   
+
    env = (sym_environment *) calloc(1, sizeof(sym_environment));
 
 #if !defined(COMPILE_IN_TM) || !defined(COMPILE_IN_LP) ||                   \
     !defined(COMPILE_IN_CG) || !defined(COMPILE_IN_CP)
-       
+
    env->my_tid = register_process();   /* Enroll this process */
 
 #ifdef __PVM__
@@ -108,11 +108,11 @@ sym_environment *sym_open_environment()
 			    this process as output from this process itself*/
 #endif
 #endif
-   
+
 #if 0
    sym_version();
 #endif
-   
+
    if (initialize_u(env) == FUNCTION_TERMINATED_NORMALLY){
       return(env);
    }else{
@@ -148,7 +148,7 @@ sym_environment *sym_open_environment()
    }
 #endif
 
-}   
+}
 
 /*===========================================================================*/
 /*===========================================================================*/
@@ -156,7 +156,7 @@ sym_environment *sym_open_environment()
 int sym_close_environment(sym_environment *env)
 {
    int termcode = 0;
-   
+
    CALL_WRAPPER_FUNCTION( free_master_u(env) );
 
    FREE(env);
@@ -177,16 +177,16 @@ int sym_reset_environment(sym_environment *env)
 {
    int termcode = 0, my_tid = env->my_tid;
    //params par = env->par;
-   
+
    int obj_sense = env->mip->obj_sense;
-   
+
    free_master(env);
 
 #if (!defined(COMPILE_IN_TM) || !defined(COMPILE_IN_LP) ||                   \
     !defined(COMPILE_IN_CG) || !defined(COMPILE_IN_CP)) && defined(__PVM__)
    pvm_catchout(0);
 #endif
-   
+
    //memset(env, 0, sizeof(sym_environment));
 
    //env->my_tid = my_tid;
@@ -206,7 +206,7 @@ int sym_reset_environment(sym_environment *env)
 int sym_set_defaults(sym_environment *env)
 {
    int termcode = 0;
-   
+
    tm_params *tm_par = &env->par.tm_par;
    lp_params *lp_par = &env->par.lp_par;
    cg_params *cg_par = &env->par.cg_par;
@@ -233,7 +233,7 @@ int sym_set_defaults(sym_environment *env)
 #endif
 #ifdef COMPILE_IN_CP
    strcat(env->par.tm_exe, "_cp");
-#endif   
+#endif
    strcpy(env->par.dg_exe, "symphony_dg");
    env->par.tm_debug = 0;
    env->par.dg_debug = 0;
@@ -242,7 +242,7 @@ int sym_set_defaults(sym_environment *env)
    env->par.do_draw_graph = FALSE;
    env->par.use_permanent_cut_pools = FALSE;
    env->par.multi_criteria = FALSE;
-   env->par.mc_binary_search_tolerance = 0; 
+   env->par.mc_binary_search_tolerance = 0;
    env->par.mc_compare_solution_tolerance = .001;
    env->par.mc_search_order = MC_FIFO;
    env->par.mc_warm_start = FALSE;
@@ -281,8 +281,8 @@ int sym_set_defaults(sym_environment *env)
 
    tm_par->warm_start = FALSE;
    tm_par->warm_start_node_ratio = 0.0;
-   tm_par->warm_start_node_limit = MAXINT;      
-   tm_par->warm_start_node_level_ratio = 0.0; 
+   tm_par->warm_start_node_limit = MAXINT;
+   tm_par->warm_start_node_level_ratio = 0.0;
    tm_par->warm_start_node_level = MAXINT;
 
    tm_par->logging = NO_LOGGING;
@@ -302,7 +302,7 @@ int sym_set_defaults(sym_environment *env)
    // tm_par->gap_limit = 0.0;
    tm_par->find_first_feasible = FALSE;
    tm_par->sensitivity_analysis = FALSE;
-   tm_par->rs_mode_enabled = FALSE; 
+   tm_par->rs_mode_enabled = FALSE;
    tm_par->rs_lp_iter_limit = 1000000;
    tm_par->output_mode = 1;
 
@@ -406,20 +406,20 @@ int sym_set_defaults(sym_environment *env)
    lp_par->cgl.clique_max_depth = 50;
    lp_par->cgl.oddhole_max_depth = 50;
    lp_par->cgl.knapsack_max_depth = 50;
-   
-   lp_par->cgl.generate_cgl_gomory_cuts_freq = 
-      lp_par->cgl.generate_cgl_redsplit_cuts_freq = 
-      lp_par->cgl.generate_cgl_knapsack_cuts_freq = 
-      lp_par->cgl.generate_cgl_oddhole_cuts_freq = 
-      lp_par->cgl.generate_cgl_clique_cuts_freq = 
-      lp_par->cgl.generate_cgl_probing_cuts_freq = 
-      lp_par->cgl.generate_cgl_mir_cuts_freq = 
-      lp_par->cgl.generate_cgl_twomir_cuts_freq = 
-      lp_par->cgl.generate_cgl_flowcover_cuts_freq = 
-      lp_par->cgl.generate_cgl_rounding_cuts_freq = 
-      lp_par->cgl.generate_cgl_lift_and_project_cuts_freq = 
+
+   lp_par->cgl.generate_cgl_gomory_cuts_freq =
+      lp_par->cgl.generate_cgl_redsplit_cuts_freq =
+      lp_par->cgl.generate_cgl_knapsack_cuts_freq =
+      lp_par->cgl.generate_cgl_oddhole_cuts_freq =
+      lp_par->cgl.generate_cgl_clique_cuts_freq =
+      lp_par->cgl.generate_cgl_probing_cuts_freq =
+      lp_par->cgl.generate_cgl_mir_cuts_freq =
+      lp_par->cgl.generate_cgl_twomir_cuts_freq =
+      lp_par->cgl.generate_cgl_flowcover_cuts_freq =
+      lp_par->cgl.generate_cgl_rounding_cuts_freq =
+      lp_par->cgl.generate_cgl_lift_and_project_cuts_freq =
       lp_par->cgl.generate_cgl_landp_cuts_freq = 5;
-   
+
    lp_par->cgl.gomory_generated_in_root = FALSE;
    lp_par->cgl.redsplit_generated_in_root = FALSE;
    lp_par->cgl.knapsack_generated_in_root = FALSE;
@@ -432,28 +432,28 @@ int sym_set_defaults(sym_environment *env)
    lp_par->cgl.rounding_generated_in_root = FALSE;
    lp_par->cgl.lift_and_project_generated_in_root = FALSE;
    lp_par->cgl.landp_generated_in_root = FALSE;
- 
+
    lp_par->cgl.use_chain_strategy = TRUE;
    lp_par->cgl.chain_status = CGL_CHAIN_START;
    lp_par->cgl.max_chain_backtrack = 1;
    lp_par->cgl.max_chain_trial_num = 10;
    lp_par->cgl.chain_trial_freq = 10;
    lp_par->cgl.chain_weighted_gap = 9.333e-6;
-   lp_par->cgl.chain_br_weighted_gap = 0.000933; 
-   
+   lp_par->cgl.chain_br_weighted_gap = 0.000933;
+
    lp_par->multi_criteria = FALSE;
    lp_par->mc_find_supported_solutions = FALSE;
    lp_par->mc_add_optimality_cuts = TRUE;
    lp_par->mc_gamma = 1;       /* Determines the weight on objective 1 */
    lp_par->mc_tau   = 0;       /* Determines the weight on objective 2 */
    lp_par->mc_rho   = 0.00001; /* For augmented Chebyshev norm */
-   
+
 #ifdef __OSI_GLPK__
    lp_par->max_presolve_iter = -1;
 #else
    lp_par->max_presolve_iter = 40;
 #endif
-   
+
    lp_par->is_feasible_default = TEST_INTEGRALITY;
    lp_par->send_feasible_solution_default = SEND_NONZEROS;
    lp_par->display_solution_default = DISP_NOTHING;
@@ -465,23 +465,23 @@ int sym_set_defaults(sym_environment *env)
    lp_par->strong_branching_high_low_weight = 0.8; // alpha*min + (1-alpha)*max
    lp_par->user_set_strong_branching_cand_num = FALSE;
    lp_par->user_set_max_presolve_iter = FALSE;
-   /* 
+   /*
     * strong branching is carried out for candidate variables even when pseudo
-    * costs are reliably known when the depth is less than this number 
+    * costs are reliably known when the depth is less than this number
    */
 
-   lp_par->strong_br_min_level = 4; 
+   lp_par->strong_br_min_level = 4;
    lp_par->strong_br_all_candidates_level = 6;
    lp_par->limit_strong_branching_time = TRUE;
    lp_par->use_hot_starts = TRUE;
-   lp_par->use_branching_prep = FALSE; 
-   lp_par->should_use_rel_br = -1; 
+   lp_par->use_branching_prep = FALSE;
+   lp_par->should_use_rel_br = -1;
    lp_par->rel_br_override_default = TRUE;
    lp_par->rel_br_override_max_solves = 200;
    lp_par->rel_br_chain_backtrack = 5;
    lp_par->rel_br_min_imp = 0.0133;
    lp_par->rel_br_max_imp = 0.30;
-   
+
    lp_par->rel_br_threshold = 8;
    lp_par->rel_br_max_solves = 20;      /* stop after these many LP-solve calls
                                            regardless of improvement */
@@ -514,32 +514,32 @@ int sym_set_defaults(sym_environment *env)
    lp_par->fr_min_int_fixed_ratio = 0.80;
    lp_par->fr_max_c_fixed_ratio = 0.0;
    lp_par->fr_min_c_fixed_ratio = 0.0;
-   lp_par->fr_incr_ratio = 0.03; 
+   lp_par->fr_incr_ratio = 0.03;
    lp_par->fr_min_gap = 1.0;
-   lp_par->fr_dive_level = 2; 
-   
-   lp_par->rs_mode_enabled = tm_par->rs_mode_enabled; 
+   lp_par->fr_dive_level = 2;
+
+   lp_par->rs_mode_enabled = tm_par->rs_mode_enabled;
    lp_par->rs_lp_iter_limit = tm_par->rs_lp_iter_limit;
-   
+
    /* rins search */
    lp_par->rs_enabled   = TRUE;
    lp_par->rs_min_int_fixed_ratio = 0.90;
    lp_par->fr_min_c_fixed_ratio = 0.0;
    lp_par->rs_min_gap = 1.0;
-   lp_par->rs_dive_level = 2; 
-   
+   lp_par->rs_dive_level = 2;
+
    /* local branching */
 #ifdef USE_SYM_APPLICATION
    lp_par->lb_enabled   = FALSE;
 #else
    lp_par->lb_enabled   = TRUE;
-#endif   
+#endif
    lp_par->lb_frequency   = 10;
    lp_par->lb_min_gap = 1.0;
    lp_par->lb_search_k = 10;
-   lp_par->lb_first_feas_enabled = 0;   
-   lp_par->lb_dive_level = 2; 
-   
+   lp_par->lb_first_feas_enabled = 0;
+   lp_par->lb_dive_level = 2;
+
    /* diving search */
    lp_par->ds_enabled = TRUE;
    lp_par->ds_frequency = 4;
@@ -562,22 +562,22 @@ int sym_set_defaults(sym_environment *env)
    lp_par->ds_solve_ip = FALSE;
    lp_par->ds_solve_ip_col_ratio = 0.2;
    lp_par->ds_solve_ip_min_gap = 0.1;    /* % gap */
-   lp_par->ds_min_gap = 0.5;    
+   lp_par->ds_min_gap = 0.5;
 
    /* local search */
    lp_par->ls_enabled = TRUE;
-   lp_par->ls_min_gap = 0.00001; 
+   lp_par->ls_min_gap = 0.00001;
    lp_par->ls_frequency = 4;
    lp_par->ls_fix_ratio = 0.0;
 
    /* rounding */
    lp_par->rounding_enabled = TRUE;
-   lp_par->rounding_min_gap = 0.0001; 
+   lp_par->rounding_min_gap = 0.0001;
    lp_par->rounding_frequency = 1;
 
    /* shifting */
    lp_par->shifting_enabled = TRUE;
-   lp_par->shifting_min_gap = 0.0001; 
+   lp_par->shifting_min_gap = 0.0001;
    lp_par->shifting_frequency = 1;
 
    /************************** cut_gen defaults *****************************/
@@ -666,7 +666,7 @@ int sym_set_user_data(sym_environment *env, void *user)
    if (user == NULL){
       return(ERROR__USER);
    }
-   
+
    env->user = user;
 
    return(FUNCTION_TERMINATED_NORMALLY);
@@ -680,18 +680,18 @@ int sym_get_user_data(sym_environment *env, void **user)
    if (env->user == NULL){
       return(ERROR__USER);
    }
-   
+
    *user = env->user;
 
    return(FUNCTION_TERMINATED_NORMALLY);
 }
-   
+
 /*===========================================================================*/
 /*===========================================================================*/
 
 int sym_read_mps(sym_environment *env, char *infile)
-{  
-   
+{
+
   strncpy(env->par.infile, infile, MAX_FILE_NAME_LENGTH);
   strcpy(env->par.datafile, "");
   env->par.file_type = MPS_FORMAT;
@@ -702,8 +702,8 @@ int sym_read_mps(sym_environment *env, char *infile)
 /*===========================================================================*/
 
 int sym_read_lp(sym_environment *env, char *infile)
-{  
-   
+{
+
   strncpy(env->par.infile, infile, MAX_FILE_NAME_LENGTH);
   strcpy(env->par.datafile, "");
   env->par.file_type = LP_FORMAT;
@@ -714,7 +714,7 @@ int sym_read_lp(sym_environment *env, char *infile)
 /*===========================================================================*/
 
 int sym_read_gmpl(sym_environment *env, char *modelfile, char *datafile)
-{  
+{
   strncpy(env->par.infile, modelfile, MAX_FILE_NAME_LENGTH);
   strncpy(env->par.datafile, datafile, MAX_FILE_NAME_LENGTH);
   env->par.file_type = GMPL_FORMAT;
@@ -725,7 +725,7 @@ int sym_read_gmpl(sym_environment *env, char *modelfile, char *datafile)
 /*===========================================================================*/
 
 int sym_write_mps(sym_environment *env, char *infile)
-{  
+{
    write_mip_desc_mps(env->mip, infile);
    return 0;
 }
@@ -735,10 +735,10 @@ int sym_write_mps(sym_environment *env, char *infile)
 /*===========================================================================*/
 
 int sym_write_lp(sym_environment *env, char *infile)
-{  
+{
    write_mip_desc_lp(env->mip, infile);
    return 0;
-   
+
 }
 
 /*===========================================================================*/
@@ -748,9 +748,9 @@ int sym_load_problem(sym_environment *env)
 {
    double t = 0;
    int termcode = 0;
- 
+
    /*------------------------------------------------------------------------*\
-    *                         start reading in problem                        
+    *                         start reading in problem
    \*------------------------------------------------------------------------*/
 
    (void) used_time(&t);
@@ -774,7 +774,7 @@ int sym_load_problem(sym_environment *env)
    env->comp_times.readtime = used_time(&t);
 
    env->termcode = TM_NO_SOLUTION;
-   env->mip->is_modified = TRUE; 
+   env->mip->is_modified = TRUE;
 
    return(termcode);
 }
@@ -786,7 +786,7 @@ int sym_find_initial_bounds(sym_environment *env)
 {
    double total_time = 0;
    int termcode = 0;
-   
+
    /* Finds the upper and lower bounds for the problem */
    CALL_WRAPPER_FUNCTION( start_heurs_u(env) );
 
@@ -810,7 +810,7 @@ int sym_find_initial_bounds(sym_environment *env)
 	    printf( "Lower Bound: %.3f\n", -env->ub + env->mip->obj_offset);
 	 }else{
 	    printf( "Upper Bound: %.3f\n", env->ub + env->mip->obj_offset);
-	 } 
+	 }
       }
       CALL_WRAPPER_FUNCTION( display_solution_u(env, 0) );
       if (env->par.tm_par.lp_machs)
@@ -887,8 +887,8 @@ int sym_solve(sym_environment *env)
    }
 
    env->mip->is_modified = FALSE;
-   
-   /* we send environment in just because we may need to 
+
+   /* we send environment in just because we may need to
       update rootdesc and so...*/
 
    termcode = sym_presolve(env);
@@ -896,10 +896,10 @@ int sym_solve(sym_environment *env)
    if(termcode == PREP_INFEAS || termcode == PREP_UNBOUNDED ||
       termcode == PREP_SOLVED || termcode == PREP_NUMERIC_ERROR ||
       termcode == PREP_OTHER_ERROR){
-      
+
       env->mip = env->orig_mip;
-      env->orig_mip = 0;      
-      
+      env->orig_mip = 0;
+
       if(termcode == PREP_INFEAS){
 	 if (env->par.verbosity >= -1 ){
 	    printf("\n****************************************************\n");
@@ -920,13 +920,13 @@ int sym_solve(sym_environment *env)
 	 //env->best_sol.xind = (int *) malloc(ISIZE *
 	 //			     env->prep_mip->fixed_n);
 	 //env->best_sol.xval = (double *) malloc(DSIZE *
-	 //				env->prep_mip->fixed_n); 
+	 //				env->prep_mip->fixed_n);
 	 //env->best_sol.xlength = env->prep_mip->fixed_n;
 	 //memcpy(env->best_sol.xind, env->prep_mip->fixed_ind, ISIZE *
 	 //env->prep_mip->fixed_n);
 	 //memcpy(env->best_sol.xval, env->prep_mip->fixed_val, ISIZE *
 	 //env->prep_mip->fixed_n);
-	 
+
 	 if (env->par.verbosity >= -1 ){
 	    printf("\n****************************************************\n");
 	    printf(  "* Optimal Solution Found in Preprocessing          *\n");
@@ -958,7 +958,7 @@ int sym_solve(sym_environment *env)
    if (env->par.verbosity >= -1){
       printf("Solving...\n\n");
    }
-   
+
 #ifndef COMPILE_IN_TM
    /*------------------------------------------------------------------------*\
     * Start the tree manager and send the parameters
@@ -1004,9 +1004,9 @@ int sym_solve(sym_environment *env)
       }
 #endif
    }
-#endif   
+#endif
    send_msg(env->tm_tid, TM_DATA);
-      
+
    /*------------------------------------------------------------------------*\
     * Send out the root node
    \*------------------------------------------------------------------------*/
@@ -1014,7 +1014,7 @@ int sym_solve(sym_environment *env)
    if (!env->par.warm_start){
       repricing = FALSE;
       node_type = ROOT_NODE;
-      
+
       s_bufid = init_send(DataInPlace);
       send_char_array(&repricing, 1);
       send_char_array(&node_type, 1);
@@ -1040,13 +1040,13 @@ int sym_solve(sym_environment *env)
       freebuf(s_bufid);
    }
 #else
-   
+
    /*------------------------------------------------------------------------*\
     * Create the treemanager and copy the problem data
    \*------------------------------------------------------------------------*/
 
-   /* 
-    * set granularity. 
+   /*
+    * set granularity.
     * TODO: move this to preprocessor when it becomes available
     * TODO: put a new flag that checks if user wants to override this
     * TODO: find if granularity could be 0.1 or 0.2 or ... instead of just
@@ -1066,14 +1066,14 @@ int sym_solve(sym_environment *env)
             } else if (env->mip->ub[i]-env->mip->lb[i]>1e-7) {
                granularity=0;
                break;
-            } 
-         } // else do nothing 
+            }
+         } // else do nothing
       }
       /*
        * if granularity >= 1, set it at granularity - epsilon, otherwise set at
        * epsilon
        */
-      env->par.tm_par.granularity = env->par.lp_par.granularity = 
+      env->par.tm_par.granularity = env->par.lp_par.granularity =
          fabs((double)granularity - 1e-7);
    }
    PRINT(env->par.verbosity, 0, ("granularity set at %f\n",
@@ -1082,7 +1082,7 @@ int sym_solve(sym_environment *env)
    if (env->par.tm_par.node_selection_rule == BEST_FIRST_SEARCH){
       env->par.tm_par.node_selection_rule = LOWEST_LP_FIRST;
    }
-   
+
    env->tm = tm = (tm_prob *) calloc(1, sizeof(tm_prob));
 
    tm->par = env->par.tm_par;
@@ -1091,9 +1091,9 @@ int sym_solve(sym_environment *env)
       env->mip->obj_offset += env->obj_offset;
    }
 
-   /* if an upper bound is set, it should also include the obj_offset, 
+   /* if an upper bound is set, it should also include the obj_offset,
       so adjust */
-   
+
    if ((tm->has_ub = env->has_ub)){
      env->ub -= env->mip->obj_offset;
      tm->ub = env->ub;
@@ -1105,23 +1105,23 @@ int sym_solve(sym_environment *env)
      tm->ub_estimate = env->ub_estimate;
    }
    tm->lb = env->lb;
-   
+
    tm->obj_offset = env->mip->obj_offset;
    tm->obj_sense = env->mip->obj_sense;
    tm->master = env->my_tid;
-   
-#ifdef COMPILE_IN_LP  
+
+#ifdef COMPILE_IN_LP
    CALL_WRAPPER_FUNCTION( send_lp_data_u(env, 0) );
 #ifdef _OPENMP
    lp_data_sent = env->par.tm_par.max_active_nodes;
-#else 
+#else
    lp_data_sent = 1;
 #endif
 #ifdef COMPILE_IN_CG
    CALL_WRAPPER_FUNCTION( send_cg_data_u(env, 0) );
 #ifdef _OPENMP
    cg_data_sent = env->par.tm_par.max_active_nodes;
-#else 
+#else
    cg_data_sent = 1;
 #endif
 #endif
@@ -1134,7 +1134,7 @@ int sym_solve(sym_environment *env)
    }
 #ifdef _OPENMP
    cp_data_sent = env->par.tm_par.max_cp_num;
-#else 
+#else
    cp_data_sent = 1;
 #endif
 #endif
@@ -1161,7 +1161,7 @@ int sym_solve(sym_environment *env)
       }
       FREE(tmp_sol);
    }
-   
+
    //   memset(&(env->best_sol), 0, sizeof(lp_sol));
 
    if (env->warm_start && env->par.tm_par.warm_start){
@@ -1203,7 +1203,7 @@ int sym_solve(sym_environment *env)
    }
    /* Now the tree manager owns everything */
    FREE(env->warm_start);
-   
+
    if ((termcode = tm_initialize(tm , base, rootdesc)) < 0){
       tm_close(tm, termcode);
 
@@ -1212,7 +1212,7 @@ int sym_solve(sym_environment *env)
 	 send_msg(env->dg_tid, CTOI_YOU_CAN_DIE);
 	 freebuf(s_bufid);
       }
-      
+
       if (env->par.tm_par.lp_machs)
 	 FREE(env->par.tm_par.lp_machs[0]);
       FREE(env->par.tm_par.lp_machs);
@@ -1222,20 +1222,20 @@ int sym_solve(sym_environment *env)
       if (env->par.tm_par.cp_machs)
 	 FREE(env->par.tm_par.cp_machs[0]);
       FREE(env->par.tm_par.cp_machs);
-      
+
       free_tm(tm);
 
       env->termcode = termcode;
-      
+
       return(termcode);
    }
-   
+
 
 #ifdef TRACE_PATH
    {
       int feas_sol_size;
       int *feas_sol;
-#ifdef USE_SYM_APPLICATION      
+#ifdef USE_SYM_APPLICATION
       if (user_send_feas_sol(env->user,&feas_sol_size,&feas_sol)==USER_NO_PP){
 	 tm->feas_sol_size = feas_sol_size;
 	 tm->feas_sol = (int *) calloc (tm->feas_sol_size, sizeof(int));
@@ -1244,12 +1244,12 @@ int sym_solve(sym_environment *env)
 #endif
    }
 #endif
-#endif   
-   
+#endif
+
    /*------------------------------------------------------------------------*\
     * Wait for messages
    \*------------------------------------------------------------------------*/
-   
+
 #ifdef COMPILE_IN_TM
    while (!(lp_data_sent == env->par.tm_par.max_active_nodes) ||
 	  !(cg_data_sent == env->par.tm_par.max_active_nodes) ||
@@ -1335,7 +1335,7 @@ int sym_solve(sym_environment *env)
 
        case SOMETHING_DIED:
        case TM_TIME_LIMIT_EXCEEDED:
-       case TM_SIGNAL_CAUGHT:  
+       case TM_SIGNAL_CAUGHT:
        case TM_NODE_LIMIT_EXCEEDED:
        case TM_TARGET_GAP_ACHIEVED:
        case TM_FOUND_FIRST_FEASIBLE:
@@ -1376,9 +1376,9 @@ int sym_solve(sym_environment *env)
 #else
       /* unconfuse vi { */
    }
-   
+
    /*------------------------------------------------------------------------*\
-    * Solve the problem and receive solutions                         
+    * Solve the problem and receive solutions
    \*------------------------------------------------------------------------*/
 #ifdef COMPILE_IN_LP
    sp_initialize(tm);
@@ -1411,25 +1411,25 @@ int sym_solve(sym_environment *env)
       if (env->tm->lpp[thread_num]->best_sol.has_sol){
 	 if(env->orig_mip){
 	    prep_merge_solution(env->orig_mip, env->mip,
-				&(env->tm->lpp[thread_num]->best_sol.xlength), 
+				&(env->tm->lpp[thread_num]->best_sol.xlength),
 				&(env->tm->lpp[thread_num]->best_sol.xind),
 				&(env->tm->lpp[thread_num]->best_sol.xval));
 	 }
 	 FREE(env->best_sol.xind);
 	 FREE(env->best_sol.xval);
-	 env->best_sol = 
+	 env->best_sol =
 	    env->tm->lpp[thread_num]->best_sol;
       }else {
 	 if(env->best_sol.has_sol){
 	    if(env->orig_mip){
 	       prep_merge_solution(env->orig_mip, env->mip,
-				   &(env->best_sol.xlength), 
+				   &(env->best_sol.xlength),
 				   &(env->best_sol.xind),
 				   &(env->best_sol.xval));
 	    }
 	    FREE(env->tm->lpp[thread_num]->best_sol.xind);
 	    FREE(env->tm->lpp[thread_num]->best_sol.xval);
-	    env->tm->lpp[thread_num]->best_sol = env->best_sol;	    
+	    env->tm->lpp[thread_num]->best_sol = env->best_sol;
 	 }
       }
    }
@@ -1437,16 +1437,16 @@ int sym_solve(sym_environment *env)
    if (env->tm->best_sol.has_sol){
       if(env->orig_mip){
 	 prep_merge_solution(env->orig_mip, env->mip,
-			     &(env->tm->best_sol.xlength), 
+			     &(env->tm->best_sol.xlength),
 			     &(env->tm->best_sol.xind),
 			     &(env->tm->best_sol.xval));
-      }     
+      }
       FREE(env->best_sol.xind);
       FREE(env->best_sol.xval);
       env->best_sol = env->tm->best_sol;
    }
 #endif
-   
+
    if (best_sol->has_sol) {
       memcpy(&env->warm_start->best_sol, &env->best_sol, sizeof(lp_sol) *1);
       env->warm_start->best_sol.xind = 0;
@@ -1456,10 +1456,10 @@ int sym_solve(sym_environment *env)
 	    (int *) malloc(ISIZE * best_sol->xlength);
 	 env->warm_start->best_sol.xval =
 	    (double *) malloc(DSIZE * best_sol->xlength);
-	 memcpy(env->warm_start->best_sol.xind, 
+	 memcpy(env->warm_start->best_sol.xind,
 		best_sol->xind, ISIZE * best_sol->xlength);
-	 memcpy(env->warm_start->best_sol.xval, 
-		best_sol->xval, DSIZE * best_sol->xlength);	
+	 memcpy(env->warm_start->best_sol.xval,
+		best_sol->xval, DSIZE * best_sol->xlength);
       }
    }
 
@@ -1471,7 +1471,7 @@ int sym_solve(sym_environment *env)
       tm->cpp = NULL;
    }
 #endif
-   
+
 #if !defined(COMPILE_IN_LP) && 0
    /* This is not needed anymore */
    if (termcode != SOMETHING_DIED){
@@ -1508,16 +1508,16 @@ int sym_solve(sym_environment *env)
 #if 0
    /* Not sure of the reason for this */
    else if((termcode == TM_ERROR__NUMERICAL_INSTABILITY ||
-	    termcode == SOMETHING_DIED) && 
+	    termcode == SOMETHING_DIED) &&
 	   best_sol->xlength ){
      termcode = TM_FEASIBLE_SOLUTION_FOUND;
    }
 #endif
-   
+
 #endif
 
    /*------------------------------------------------------------------------*\
-    * Display the the results and solution data                               
+    * Display the the results and solution data
    \*------------------------------------------------------------------------*/
 
    if (env->par.verbosity >= -1 ){
@@ -1556,7 +1556,7 @@ int sym_solve(sym_environment *env)
 	 total_time  = env->comp_times.readtime;
 	 total_time += env->comp_times.ub_overhead + env->comp_times.ub_heurtime;
 	 total_time += env->comp_times.lb_overhead + env->comp_times.lb_heurtime;
-   
+
 #if !defined(_MSC_VER) && defined (__MNO_CYGWIN) /* FIXME: CPU timing doesn't work in Windows */
 	 printf( "====================== Misc Timing =========================\n");
 	 printf( "  Problem IO        %.3f\n", env->comp_times.readtime);
@@ -1569,13 +1569,13 @@ int sym_solve(sym_environment *env)
 #endif
       }
    }
-   
+
    env->termcode = termcode;
 
 #ifdef COMPILE_IN_TM
    if (tm->lb > env->lb) env->lb = tm->lb;
    if(env->par.verbosity >=0 ) {
-      print_statistics(&(tm->comp_times), &(tm->stat), 
+      print_statistics(&(tm->comp_times), &(tm->stat),
 		       &(tm->lp_stat),
 		       tm->ub, env->lb,
 		       total_time, start_time, wall_clock(NULL),
@@ -1592,13 +1592,13 @@ int sym_solve(sym_environment *env)
    if(env->orig_mip){
       for (i = 0; i < env->sp->num_solutions; i++){
 	 prep_merge_solution(env->orig_mip, env->mip,
-			     &(env->sp->solutions[i]->xlength), 
+			     &(env->sp->solutions[i]->xlength),
 			     &(env->sp->solutions[i]->xind),
 			     &(env->sp->solutions[i]->xval));
 	 }
    }
 #endif
-   
+
    if(env->par.verbosity >=-1 ) {
 #ifdef COMPILE_IN_LP
       CALL_WRAPPER_FUNCTION( display_solution_u(env, env->tm->opt_thread_num) );
@@ -1608,10 +1608,10 @@ int sym_solve(sym_environment *env)
    }
 #else
    if(env->par.verbosity >=0 ) {
-      print_statistics(&(env->comp_times.bc_time), &(env->warm_start->stat), 
+      print_statistics(&(env->comp_times.bc_time), &(env->warm_start->stat),
 		       NULL,
-		       env->ub, env->lb, 0, start_time, wall_clock(NULL), 
-		       env->mip->obj_offset, env->mip->obj_sense, 
+		       env->ub, env->lb, 0, start_time, wall_clock(NULL),
+		       env->mip->obj_offset, env->mip->obj_sense,
 		       env->has_ub, NULL, 0);
       CALL_WRAPPER_FUNCTION( display_solution_u(env, 0) );
       }
@@ -1625,9 +1625,9 @@ int sym_solve(sym_environment *env)
    }
 #endif
 
-      
+
 #ifndef USE_SYM_APPLICATION
-   
+
    if(env->par.prep_par.level > 0){
       if(env->orig_mip){
 	 env->mip = env->orig_mip;
@@ -1636,7 +1636,7 @@ int sym_solve(sym_environment *env)
    }
 
 #endif
-   
+
    env->has_ub = FALSE;
    env->ub = 0.0;
    env->lb = -MAXDOUBLE;
@@ -1656,7 +1656,7 @@ int sym_solve(sym_environment *env)
    if (env->par.tm_par.cp_machs)
       FREE(env->par.tm_par.cp_machs[0]);
    FREE(env->par.tm_par.cp_machs);
-   
+
    free_tm(tm);
 
    return(termcode);
@@ -1672,26 +1672,26 @@ int sym_warm_solve(sym_environment *env)
    cut_data **upd_cuts;
    int loc, ws_cnum, cut_num = 0, *cut_ind = NULL, *tmp_ind = NULL;
    /* first check for the updates! */
-   char *cru_vars = NULL; 
+   char *cru_vars = NULL;
    double etol = 1e-04;
    if(env->par.tm_par.keep_description_of_pruned != KEEP_IN_MEMORY){
 
       return(sym_solve(env));
-      
+
    }else{
-      
+
       if (env->warm_start){
 	 env->par.tm_par.warm_start = TRUE;
       } else {
 	return(sym_solve(env));
       }
-      
+
       if(env->mip->change_num){
 	 env->has_ub = FALSE;
 	 env->ub = 0.0;
 	 env->lb = -MAXDOUBLE;
-	 
-	 env->warm_start->has_ub = env->best_sol.has_sol = 
+
+	 env->warm_start->has_ub = env->best_sol.has_sol =
 	    env->warm_start->best_sol.has_sol = FALSE;
 	 env->warm_start->ub = env->warm_start->best_sol.objval = 0.0;
 	 env->warm_start->lb = -MAXDOUBLE;
@@ -1708,68 +1708,68 @@ int sym_warm_solve(sym_environment *env)
 	 env->has_ub = env->has_mc_ub;
 	 env->ub = env->mc_ub;
       }
-      
+
       for(i = 0; i < env->mip->change_num; i++){
 	 change_type = env->mip->change_type[i];
-	 if(change_type == RHS_CHANGED || change_type == COL_BOUNDS_CHANGED || 
+	 if(change_type == RHS_CHANGED || change_type == COL_BOUNDS_CHANGED ||
 	    change_type == OBJ_COEFF_CHANGED || change_type == COLS_ADDED){
 	    if(change_type == OBJ_COEFF_CHANGED){
-	       if(env->par.lp_par.do_reduced_cost_fixing && !env->par.multi_criteria){		 
+	       if(env->par.lp_par.do_reduced_cost_fixing && !env->par.multi_criteria){
 		  printf("sym_warm_solve(): SYMPHONY can not resolve for the\n");
-		  printf("obj coeff change when reduced cost fixing is on,"); 
-		  printf("for now!\n"); 
-		  return(FUNCTION_TERMINATED_ABNORMALLY);   
+		  printf("obj coeff change when reduced cost fixing is on,");
+		  printf("for now!\n");
+		  return(FUNCTION_TERMINATED_ABNORMALLY);
 	       }
 	    } else{
 	       if(env->par.lp_par.cgl.generate_cgl_cuts){
 		  printf("sym_warm_solve(): SYMPHONY can not resolve for the\n");
-		  printf("rhs or column bounds change when cuts exist, for now!\n"); 
+		  printf("rhs or column bounds change when cuts exist, for now!\n");
 		  return(FUNCTION_TERMINATED_ABNORMALLY);
-	       } 
+	       }
 	    }
 	    if(!env->mip->cru_vars_num){
 	       analyzed = env->warm_start->stat.analyzed;
 	       depth = env->warm_start->stat.max_depth;
 	       rated = (int)(env->par.tm_par.warm_start_node_ratio * analyzed);
-	       level_rated = (int)(env->par.tm_par.warm_start_node_level_ratio * depth); 
-	       node_limit = env->par.tm_par.warm_start_node_limit;      
+	       level_rated = (int)(env->par.tm_par.warm_start_node_level_ratio * depth);
+	       node_limit = env->par.tm_par.warm_start_node_limit;
 	       level = env->par.tm_par.warm_start_node_level;
 	       index = node_limit <= rated ? node_limit : rated ;
 	       level = level <= level_rated ? level : level_rated;
-	       
+
 	       if ((level > 0 && level < depth) || index > 0) {
 		  if ( level > 0 && level < depth) {
-		     env->warm_start->trim_tree = TRIM_LEVEL;		  
+		     env->warm_start->trim_tree = TRIM_LEVEL;
 		     env->warm_start->trim_tree_level = level;
-		     //cut_ws_tree_level(env, env->warm_start->rootnode, level, 
-		     //	    &(env->warm_start->stat), change_type);	 
+		     //cut_ws_tree_level(env, env->warm_start->rootnode, level,
+		     //	    &(env->warm_start->stat), change_type);
 		     env->warm_start->stat.max_depth = level;
 		  } else {
 		     if (index < analyzed) {
-			if (!index) index = 1; 
-			env->warm_start->trim_tree = TRIM_INDEX;		  
+			if (!index) index = 1;
+			env->warm_start->trim_tree = TRIM_INDEX;
 			env->warm_start->trim_tree_index = index;
 			//   cut_ws_tree_index(env, env->warm_start->rootnode, index,
 			//	       &(env->warm_start->stat), change_type);
 		     }
-		  }	    
-	       }	       
+		  }
+	       }
 	    }else{
 	       env->warm_start->trim_tree = ON_CRU_VARS;
 	       cru_vars = (char *)calloc(CSIZE,env->mip->n);
 	       for(i = 0; i < env->mip->cru_vars_num; i++){
 		  cru_vars[env->mip->cru_vars[i]] = TRUE;
-	       }	       
+	       }
 	    }
-	    
-	    ws_cnum = env->warm_start->cut_num; 
+
+	    ws_cnum = env->warm_start->cut_num;
 	    if(env->warm_start->trim_tree && ws_cnum){
 	       cut_ind = (int *)malloc(ISIZE*ws_cnum);
 	       memset(cut_ind, -1, ISIZE*ws_cnum);
 	    }
-	    env->warm_start->stat.analyzed = 
+	    env->warm_start->stat.analyzed =
 	       env->warm_start->stat.created =
-	       env->warm_start->stat.tree_size = 1; //for root node */	   
+	       env->warm_start->stat.tree_size = 1; //for root node */
 
 	    update_tree_bound(env, env->warm_start->rootnode, &cut_num, cut_ind, cru_vars, change_type);
 
@@ -1778,7 +1778,7 @@ int sym_warm_solve(sym_environment *env)
 	    if(env->warm_start->has_ub){
 	       env->warm_start->ub += etol;
 	    }
-	    
+
 	    if(cut_num > 0){
 	       upd_cuts = (cut_data **)malloc(sizeof(cut_data *)*env->warm_start->allocated_cut_num);
 	       tmp_ind = (int *)malloc(ISIZE*ws_cnum);
@@ -1786,7 +1786,7 @@ int sym_warm_solve(sym_environment *env)
 		  tmp_ind[i] = i;
 	       }
 	       qsort_ii(cut_ind, tmp_ind, ws_cnum);
-	       
+
 	       for(i = 0; i < cut_num; i++){
 		  loc = tmp_ind[ws_cnum - cut_num + i];
 		  upd_cuts[i] = env->warm_start->cuts[loc];
@@ -1800,10 +1800,10 @@ int sym_warm_solve(sym_environment *env)
 		  FREE(env->warm_start->cuts[i]);
 	       }
 	       FREE(env->warm_start->cuts);
-	       env->warm_start->cuts = upd_cuts; 
+	       env->warm_start->cuts = upd_cuts;
 	       env->warm_start->cut_num = cut_num;
 	    } else{
-	       if(env->warm_start->trim_tree && env->warm_start->cut_num){	    
+	       if(env->warm_start->trim_tree && env->warm_start->cut_num){
 		  for (i = env->warm_start->cut_num - 1; i >= 0; i--){
 		     if (env->warm_start->cuts[i]){
 			FREE(env->warm_start->cuts[i]->coef);
@@ -1811,24 +1811,24 @@ int sym_warm_solve(sym_environment *env)
 		     FREE(env->warm_start->cuts[i]);
 		  }
 		  //	  FREE(env->warm_start->cuts);
-		  //env->warm_start->cuts = 0; 
-		  env->warm_start->cut_num = 0;		  
+		  //env->warm_start->cuts = 0;
+		  env->warm_start->cut_num = 0;
 	       }
 	    }
 
-#ifdef USE_SYM_APPLICATION 
+#ifdef USE_SYM_APPLICATION
 	    cut_data * cut;
 	    if(change_type == COLS_ADDED || change_type == RHS_CHANGED){
 	       for(i = 0; i < env->warm_start->cut_num; i++){
 		  cut = env->warm_start->cuts[i];
-		  user_ws_update_cuts(env->user, &(cut->size), &(cut->coef), 
-				      &(cut->rhs), &(cut->sense), cut->type, 
-				      env->mip->new_col_num,  
+		  user_ws_update_cuts(env->user, &(cut->size), &(cut->coef),
+				      &(cut->rhs), &(cut->sense), cut->type,
+				      env->mip->new_col_num,
 				      change_type);
 	       }
 	    }
-#endif	    
-	    env->warm_start->trim_tree = DO_NOT_TRIM;		  	    
+#endif
+	    env->warm_start->trim_tree = DO_NOT_TRIM;
 	    env->mip->change_num = 0;
 	    env->mip->var_type_modified = FALSE;
 	    env->mip->new_col_num = 0;
@@ -1839,13 +1839,13 @@ int sym_warm_solve(sym_environment *env)
 	 } else{
 	    printf("sym_warm_solve():");
 	    printf("Unable to re-solve this type of modification,for now!\n");
-	    return(FUNCTION_TERMINATED_ABNORMALLY); 
+	    return(FUNCTION_TERMINATED_ABNORMALLY);
 	 }
-      }      
+      }
    }
 
    /* Uncommented for now! */
-#if 0 
+#if 0
    if (env->par.trim_warm_tree) {
       trim_warm_tree(env, env->warm_start->rootnode);
    }
@@ -1854,39 +1854,15 @@ int sym_warm_solve(sym_environment *env)
    FREE(cru_vars);
    FREE(cut_ind);
    FREE(tmp_ind);
-   
+
    return(sym_solve(env));
 }
 
 /*===========================================================================*/
 /* These data types are for multi-criteria problems and are only used here   */
 /*===========================================================================*/
- 
-typedef struct SOLUTION_DATA{
-   double  obj[2];
-   double  gamma;
-   double  tau;
-   int     length;
-   int    *indices;
-   double *values;
-}solution_data;
 
-/*===========================================================================*/
 
-typedef struct SOLUTION_PAIRS{
-   int solution1;
-   int solution2;
-   double gamma1;
-   double gamma2;
-}solution_pairs;
-
-/*===========================================================================*/
-
- typedef struct WS_ITEM{
-   warm_start_desc * ws;
-   struct WS_ITEM * next;
-   double gamma;
-}ws_item;
 
 /*===========================================================================*/
 
@@ -1915,7 +1891,7 @@ int sym_mc_solve(sym_environment *env)
    double utopia[2];
    double compare_sol_tol, ub = 0.0;
    int binary_search = FALSE;
-   
+
    if (env->mip->obj2 == NULL){
       printf("Second objective function is not set.\n");
       printf("Switching to standard branch and bound.\n\n");
@@ -1932,7 +1908,7 @@ int sym_mc_solve(sym_environment *env)
 					 env->rootdesc->uind.size*ISIZE);
       env->rootdesc->uind.list[env->rootdesc->uind.size-1] = env->mip->n;
    }
-   
+
    start_time = wall_clock(NULL);
 
    /* Set some parameters */
@@ -1942,7 +1918,7 @@ int sym_mc_solve(sym_environment *env)
    }
    env->par.tm_par.granularity = env->par.lp_par.granularity =
       -MAX(env->par.lp_par.mc_rho, compare_sol_tol);
-   
+
    if (env->par.mc_binary_search_tolerance > 0){
       binary_search = TRUE;
    }
@@ -1970,19 +1946,19 @@ int sym_mc_solve(sym_environment *env)
    /* First, calculate the utopia point */
    env->par.lp_par.mc_gamma = 1.0;
    env->par.lp_par.mc_tau = -1.0;
-      
+
    printf("***************************************************\n");
    printf("***************************************************\n");
-   printf("Now solving with gamma = 1.0 tau = 0.0 \n");  
+   printf("Now solving with gamma = 1.0 tau = 0.0 \n");
    printf("***************************************************\n");
    printf("***************************************************\n\n");
 
-   /* For now, close reduced cost fixing and keep_warm_start param if 
+   /* For now, close reduced cost fixing and keep_warm_start param if
       warm starting is to be used...
    */
-   if (env->par.lp_par.mc_find_supported_solutions && 
+   if (env->par.lp_par.mc_find_supported_solutions &&
        env->par.mc_warm_start){
-      sym_set_int_param(env, "do_reduced_cost_fixing", FALSE);      
+      sym_set_int_param(env, "do_reduced_cost_fixing", FALSE);
       sym_set_int_param(env, "keep_warm_start", TRUE);
    }
 
@@ -1996,15 +1972,15 @@ int sym_mc_solve(sym_environment *env)
    }
 
 
-   if(env->par.lp_par.mc_find_supported_solutions && 
+   if(env->par.lp_par.mc_find_supported_solutions &&
       env->par.mc_warm_start){
 
       ws = sym_get_warm_start(env, FALSE);
-      
+
       switch (env->par.mc_warm_start_rule){
        case 0:
-       case 1: 
-	  sym_set_int_param(env, "do_reduced_cost_fixing", TRUE);      
+       case 1:
+	  sym_set_int_param(env, "do_reduced_cost_fixing", TRUE);
 	  sym_set_int_param(env, "keep_warm_start", FALSE);
        case 2:
 	  ws1=ws2=ws;
@@ -2019,7 +1995,7 @@ int sym_mc_solve(sym_environment *env)
       }
    }
    numprobs++;
-   
+
    /* Store the solution */
    length = solutions[numsolutions].length = env->best_sol.xlength;
    indices = solutions[numsolutions].indices = (int *) calloc(length, ISIZE);
@@ -2031,13 +2007,13 @@ int sym_mc_solve(sym_environment *env)
    solutions[numsolutions].obj[0] = env->obj[0];
    solutions[numsolutions++].obj[1] = env->obj[1];
    utopia[0] = env->obj[0];
-      
+
    env->par.lp_par.mc_gamma = -1.0;
    env->par.lp_par.mc_tau = 1.0;
-      
+
    printf("***************************************************\n");
    printf("***************************************************\n");
-   printf("Now solving with gamma = 0.0 tau = 1.0 \n");  
+   printf("Now solving with gamma = 0.0 tau = 1.0 \n");
    printf("***************************************************\n");
    printf("***************************************************\n\n");
 
@@ -2045,7 +2021,7 @@ int sym_mc_solve(sym_environment *env)
    env->utopia[0] = -MAXINT;
    env->utopia[1] = 0;
    if (env->par.lp_par.mc_find_supported_solutions){
-      
+
       for (i = 0; i < env->mip->n; i++){
 	 sym_set_obj_coeff(env, i, env->mip->obj2[i] +
 			   env->par.lp_par.mc_rho*(env->mip->obj1[i] +
@@ -2077,21 +2053,21 @@ int sym_mc_solve(sym_environment *env)
 	 env->rootdesc->uind.size--;
 	 return(termcode);
       }
-   }      
-   
-   if(env->par.lp_par.mc_find_supported_solutions && 
+   }
+
+   if(env->par.lp_par.mc_find_supported_solutions &&
       env->par.mc_warm_start){
-      
+
       switch (env->par.mc_warm_start_rule){
        case 0:
 	  break;
-       case 1:	 
+       case 1:
        case 2:
 	  ws2=sym_get_warm_start(env, FALSE);
 	  break;
        case 3:
-	  item = (ws_item *) calloc (1, sizeof(ws_item)); 
-	  item->ws = sym_get_warm_start(env, FALSE);      
+	  item = (ws_item *) calloc (1, sizeof(ws_item));
+	  item->ws = sym_get_warm_start(env, FALSE);
 	  item->gamma = 0.0;
 	  head->next = tail = item;
 	  break;
@@ -2100,7 +2076,7 @@ int sym_mc_solve(sym_environment *env)
       }
    }
    numprobs++;
-   
+
    /* Store the solution */
    length = solutions[numsolutions].length = env->best_sol.xlength;
    indices = solutions[numsolutions].indices = (int *) calloc(length, ISIZE);
@@ -2112,10 +2088,10 @@ int sym_mc_solve(sym_environment *env)
    solutions[numsolutions].obj[0] = env->obj[0];
    solutions[numsolutions++].obj[1] = env->obj[1];
    utopia[1] = env->obj[1];
-   
+
    env->utopia[1] = utopia[1];
    env->utopia[0] = utopia[0];
-   
+
    printf("***************************************************\n");
    printf("***************************************************\n");
    if(env->mip->obj_sense == SYM_MAXIMIZE){
@@ -2127,7 +2103,7 @@ int sym_mc_solve(sym_environment *env)
    }
    printf("***************************************************\n");
    printf("***************************************************\n\n");
-   
+
    /* Add the first pair to the list */
    if (solutions[0].obj[0] != solutions[1].obj[0]){
       if (binary_search){
@@ -2141,7 +2117,7 @@ int sym_mc_solve(sym_environment *env)
    }else{
       numpairs = 0;
    }
-   
+
    /* Keep taking pairs off the list and processing them until there are none
       left */
    while (numpairs > 0 && numpairs < MAX_NUM_PAIRS &&
@@ -2179,7 +2155,7 @@ int sym_mc_solve(sym_environment *env)
 	 gamma = slope/(1+slope);
       }
       tau = 1 - gamma;
-      
+
       env->par.lp_par.mc_gamma = gamma;
       env->par.lp_par.mc_tau = tau;
 
@@ -2208,27 +2184,27 @@ int sym_mc_solve(sym_environment *env)
 	    }
 	 }
       }
-      
+
       printf("***************************************************\n");
       printf("***************************************************\n");
-      printf("Now solving with gamma = %.6f tau = %.6f \n", gamma, tau);  
+      printf("Now solving with gamma = %.6f tau = %.6f \n", gamma, tau);
       printf("***************************************************\n");
       printf("***************************************************\n\n");
-      
+
       env->obj[0] = env->obj[1] = 0.0;
       env->best_sol.has_sol = FALSE;
-   
+
       if (env->par.lp_par.mc_find_supported_solutions){
-	 
+
 	 for (i = 0; i < env->mip->n; i++){
 	    sym_set_obj_coeff(env, i, gamma*env->mip->obj1[i]
 			      + tau*env->mip->obj2[i]
 			      + env->par.lp_par.mc_rho*(env->mip->obj1[i]
 							+ env->mip->obj2[i]));
 	 }
-      
+
 	 if(env->par.mc_warm_start){
-	    
+
 	    switch(env->par.mc_warm_start_rule){
 	     case 0:
 		sym_set_warm_start(env, ws);
@@ -2255,7 +2231,7 @@ int sym_mc_solve(sym_environment *env)
 		      if (gamma >= item->next->gamma){
 			 break;
 		      }
-		   } 
+		   }
 		   if ((item->gamma - gamma) <= (gamma - item->next->gamma)){
 		      sym_set_warm_start(env, item->ws);
 		   } else {
@@ -2268,7 +2244,7 @@ int sym_mc_solve(sym_environment *env)
 	     default:
 		break;
 	    }
-	    
+
 	    if ((termcode = sym_warm_solve(env)) < 0){
 
 	       /* FIXME! copy best_sol.xind and .xval from env to warm_start*/
@@ -2285,7 +2261,7 @@ int sym_mc_solve(sym_environment *env)
 		   break;
 		case 3:
 		   while(TRUE){
-		      sym_delete_warm_start(head->ws); 
+		      sym_delete_warm_start(head->ws);
 		      if(head != tail){
 			 temp = head->next;
 			 head->next = 0;
@@ -2314,7 +2290,7 @@ int sym_mc_solve(sym_environment *env)
 	    return(termcode);
 	 }
       }
-      
+
       switch(env->par.mc_warm_start_rule){
        case 0:
        case 1:
@@ -2327,8 +2303,8 @@ int sym_mc_solve(sym_environment *env)
 	  }
 	  break;
        case 3:
-	  temp = (ws_item *) calloc (1, sizeof(ws_item)); 
-	  temp->ws = sym_get_warm_start(env, FALSE);      
+	  temp = (ws_item *) calloc (1, sizeof(ws_item));
+	  temp->ws = sym_get_warm_start(env, FALSE);
 	  temp->gamma = gamma;
 	  temp->next = item->next;
 	  item->next = temp;
@@ -2336,9 +2312,9 @@ int sym_mc_solve(sym_environment *env)
        default:
 	  break;
       }
-   
+
       numprobs++;
-      
+
       if (binary_search){
 	 if (env->obj[0] - solutions[solution1].obj[0] <
 	     compare_sol_tol &&
@@ -2389,7 +2365,7 @@ int sym_mc_solve(sym_environment *env)
 	    continue;
 	 }
       }
-      
+
       /* Insert new solution */
       numinfeasible = 0;
       if (last + 2 == MAX_NUM_PAIRS){
@@ -2469,7 +2445,7 @@ int sym_mc_solve(sym_environment *env)
       printf("Maximum number of infeasible subproblems (%i) reached\n\n",
 	     MAX_NUM_INFEASIBLE);
    }
-   
+
    if (numpairs >= MAX_NUM_PAIRS){
       printf("Maximum number of solution pairs (%i) reached\n\n",
 	     MAX_NUM_PAIRS);
@@ -2498,26 +2474,26 @@ int sym_mc_solve(sym_environment *env)
       }
    }
 #endif
-   
+
    if (!env->par.multi_criteria){
-      print_statistics(&(env->comp_times.bc_time), &(env->warm_start->stat), 
-                       NULL, 0.0, 0.0, 0, start_time, wall_clock(NULL), 
+      print_statistics(&(env->comp_times.bc_time), &(env->warm_start->stat),
+                       NULL, 0.0, 0.0, 0, start_time, wall_clock(NULL),
                        env->mip->obj_offset, env->mip->obj_sense, env->has_ub,
                        NULL, 0);
-   } else{ 
+   } else{
       printf("Total WallClock Time         %.3f\n", wall_clock(NULL) -
 	     start_time);
    }
 
    printf("\nNumber of subproblems solved: %i\n", numprobs);
    printf("Number of solutions found: %i\n\n", numsolutions);
-   
+
    printf("***************************************************\n");
    printf("***************************************************\n");
    if (!env->par.lp_par.mc_find_supported_solutions){
-      printf("Displaying non-dominated solution values and breakpoints\n");  
+      printf("Displaying non-dominated solution values and breakpoints\n");
    }else{
-      printf("Displaying supported solution values and breakpoints\n");  
+      printf("Displaying supported solution values and breakpoints\n");
    }
    printf("***************************************************\n");
    printf("***************************************************\n\n");
@@ -2555,17 +2531,26 @@ int sym_mc_solve(sym_environment *env)
    }
 
    printf("Range: %.6f - %.6f\n", 0.0, gamma0);
-   
+
+   env->nsolutions = numsolutions;
+   env->solutions = (struct SOLUTION_DATA *) calloc(numsolutions, sizeof(struct SOLUTION_DATA));
    for (i = 0 ; i < numsolutions; i++){
-      FREE(solutions[i].values);
-      FREE(solutions[i].indices);
+        memcpy(&env->solutions[i], &solutions[i], sizeof(struct SOLUTION_DATA));
+        env->solutions[i].indices = (int *) calloc(solutions[i].length, sizeof(int));
+        env->solutions[i].values = (double *) calloc(solutions[i].length, sizeof(double));
+        memcpy(env->solutions[i].indices, solutions[i].indices, solutions[i].length*sizeof(int));
+        memcpy(env->solutions[i].values, solutions[i].values, solutions[i].length*sizeof(double));
+
+        FREE(solutions[i].values);
+        FREE(solutions[i].indices);
    }
+
    if (env->par.lp_par.mc_find_supported_solutions){
        if(env->par.mc_warm_start){
 
 	  /* FIXME! copy best_sol.xind and .xval from env to warm_start*/
 	  memset(&(env->best_sol), 0, sizeof(lp_sol));
-	  
+
 	  switch(env->par.mc_warm_start_rule){
 	   case 0:
 	      sym_delete_warm_start(ws);
@@ -2577,7 +2562,7 @@ int sym_mc_solve(sym_environment *env)
 	      break;
 	   case 3:
 	      while(TRUE){
-		 sym_delete_warm_start(head->ws); 
+		 sym_delete_warm_start(head->ws);
 		 if(head != tail){
 		    temp = head->next;
 		    head->next = 0;
@@ -2593,7 +2578,7 @@ int sym_mc_solve(sym_environment *env)
 	      break;
 	  }
        }
-   }else {       
+   }else {
       env->base->cutnum -=2;
       env->rootdesc->uind.size--;
    }
@@ -2604,16 +2589,21 @@ int sym_mc_solve(sym_environment *env)
 /*===========================================================================*/
 /*===========================================================================*/
 
+int sym_get_nsolutions(sym_environment *env, int *nsolutions) {
+    *nsolutions = env->nsolutions;
+    return(FUNCTION_TERMINATED_NORMALLY);
+}
+
 int sym_create_permanent_cut_pools(sym_environment *env, int * cp_num)
 {
 
    *cp_num = 0;
-   
+
 #if !(defined(COMPILE_IN_TM) && defined(COMPILE_IN_CP))
    return(FUNCTION_TERMINATED_ABNORMALLY);
 #else
    int i;
-   
+
    if (env->par.tm_par.max_cp_num){
       env->cp =
 	 (cut_pool **) malloc(env->par.tm_par.max_cp_num*sizeof(cut_pool *));
@@ -2639,12 +2629,12 @@ int sym_create_permanent_cut_pools(sym_environment *env, int * cp_num)
 /*===========================================================================*/
 
 int sym_explicit_load_problem(sym_environment *env, int numcols, int numrows,
-			      int *start, int *index, double *value,         
-			      double *collb, double *colub, char *is_int,    
-			      double *obj, double *obj2, char *rowsen,       
+			      int *start, int *index, double *value,
+			      double *collb, double *colub, char *is_int,
+			      double *obj, double *obj2, char *rowsen,
 			      double *rowrhs, double *rowrng, char make_copy)
 {
-   int termcode = 0;   
+   int termcode = 0;
    double t = 0, inf = SYM_INFINITY;
    int i = 0;
 
@@ -2655,14 +2645,14 @@ int sym_explicit_load_problem(sym_environment *env, int numcols, int numrows,
    }
 
    (void)used_time(&t);
-   
+
    sym_reset_environment(env);
 
    env->mip->m  = numrows;
    env->mip->n  = numcols;
 
-   if (make_copy){      
-      
+   if (make_copy){
+
       if(numcols){
 	 env->mip->obj    = (double *) calloc(numcols, DSIZE);
 	 env->mip->obj1   = (double *) calloc(numcols, DSIZE);
@@ -2674,23 +2664,23 @@ int sym_explicit_load_problem(sym_environment *env, int numcols, int numrows,
 	 if (obj){
 	    memcpy(env->mip->obj,  obj,  DSIZE * numcols);
 	 }
-	 
+
 	 if (obj2){
 	    memcpy(env->mip->obj2, obj2, DSIZE * numcols);
 	 }
 
 	 if (colub){
-	    memcpy(env->mip->ub, colub, DSIZE * numcols); 
+	    memcpy(env->mip->ub, colub, DSIZE * numcols);
 	 }else{
 	    for(i = 0; i<env->mip->n; i++){
 	       env->mip->ub[i] = inf;
 	    }
 	 }
-	 
+
 	 if(collb){
 	    memcpy(env->mip->lb, collb, DSIZE * numcols);
 	 }
-	 
+
 	 if (is_int){
 	    memcpy(env->mip->is_int, is_int, CSIZE * numcols);
 	 }
@@ -2703,40 +2693,40 @@ int sym_explicit_load_problem(sym_environment *env, int numcols, int numrows,
 	 env->mip->rngval = (double *) calloc(numrows, DSIZE);
 
 	 if (rowsen){
-	    memcpy(env->mip->sense, rowsen, CSIZE * numrows); 
+	    memcpy(env->mip->sense, rowsen, CSIZE * numrows);
 	 }else{
 	    memset(env->mip->sense, 'N', CSIZE *numrows);
 	 }
-	 
+
 	 if(rowrhs){
 	    memcpy(env->mip->rhs, rowrhs, DSIZE * numrows);
 	 }
-	 
+
 	 if (rowrng){
 	    memcpy(env->mip->rngval, rowrng, DSIZE * numrows);
 	 }
       }
-      
+
       //user defined matind, matval, matbeg--fill as column ordered
-      
-      if(start){      
+
+      if(start){
 
 	 env->mip->nz = start[numcols];
 	 env->mip->matbeg = (int *) calloc(ISIZE, (numcols + 1));
 	 env->mip->matval = (double *) calloc(DSIZE,start[numcols]);
 	 env->mip->matind = (int *)    calloc(ISIZE,start[numcols]);
-	 
+
 	 memcpy(env->mip->matbeg, start, ISIZE *(numcols + 1));
-	 memcpy(env->mip->matval, value, DSIZE *start[numcols]);  
-	 memcpy(env->mip->matind, index, ISIZE *start[numcols]);  
+	 memcpy(env->mip->matval, value, DSIZE *start[numcols]);
+	 memcpy(env->mip->matind, index, ISIZE *start[numcols]);
       }
-      
+
    }else{
-      
+
       if (obj){
 	 env->mip->obj = obj;
       }else{
-	 env->mip->obj    = (double *) calloc(numcols, DSIZE);	 
+	 env->mip->obj    = (double *) calloc(numcols, DSIZE);
       }
 
       env->mip->obj1   = (double *) calloc(numcols, DSIZE);
@@ -2744,7 +2734,7 @@ int sym_explicit_load_problem(sym_environment *env, int numcols, int numrows,
       if (obj2){
 	 env->mip->obj2 = obj2;
       }else{
-	 env->mip->obj2   = (double *) calloc(numcols, DSIZE);	 
+	 env->mip->obj2   = (double *) calloc(numcols, DSIZE);
       }
 
       if (rowsen){
@@ -2757,7 +2747,7 @@ int sym_explicit_load_problem(sym_environment *env, int numcols, int numrows,
       if(rowrhs){
 	 env->mip->rhs = rowrhs;
       }else{
-	 env->mip->rhs = (double *) calloc(numrows, DSIZE);	 
+	 env->mip->rhs = (double *) calloc(numrows, DSIZE);
       }
 
       if (rowrng){
@@ -2778,7 +2768,7 @@ int sym_explicit_load_problem(sym_environment *env, int numcols, int numrows,
       if (collb){
 	 env->mip->lb = collb;
       }else{
-	 env->mip->lb = (double *) calloc(numcols, DSIZE);	 
+	 env->mip->lb = (double *) calloc(numcols, DSIZE);
       }
 
       if (is_int){
@@ -2797,7 +2787,7 @@ int sym_explicit_load_problem(sym_environment *env, int numcols, int numrows,
 
    /* Start up the graphics window*/
 #if !defined(_MSC_VER) && !defined (__MNO_CYGWIN)
-   CALL_WRAPPER_FUNCTION( init_draw_graph_u(env) );   
+   CALL_WRAPPER_FUNCTION( init_draw_graph_u(env) );
 #endif
 
    if(env->mip->obj_sense == SYM_MAXIMIZE){
@@ -2806,17 +2796,17 @@ int sym_explicit_load_problem(sym_environment *env, int numcols, int numrows,
 	 env->mip->obj2[i] *= -1.0;
       }
    }
-   
+
    /*------------------------------------------------------------------------*\
     * Have the user generate the base and root description
    \*------------------------------------------------------------------------*/
 
-   CALL_WRAPPER_FUNCTION(initialize_root_node_u(env) ); 
-   
+   CALL_WRAPPER_FUNCTION(initialize_root_node_u(env) );
+
    env->comp_times.readtime = used_time(&t);
- 
+
    env->termcode = TM_NO_SOLUTION;
-   env->mip->is_modified = TRUE; 
+   env->mip->is_modified = TRUE;
 
    return termcode;
 }
@@ -2830,7 +2820,7 @@ int sym_is_abandoned(sym_environment *env)
    switch(env->termcode){
     case PREP_ERROR:
     case SOMETHING_DIED:
-    case TM_ERROR__NUMERICAL_INSTABILITY:    
+    case TM_ERROR__NUMERICAL_INSTABILITY:
        return(TRUE);
     default:
        break;
@@ -2881,7 +2871,7 @@ int sym_is_iteration_limit_reached(sym_environment *env)
 
    switch(env->termcode){
     case TM_NODE_LIMIT_EXCEEDED:
-    case TM_FOUND_FIRST_FEASIBLE: 
+    case TM_FOUND_FIRST_FEASIBLE:
        return(TRUE);
     default:
        break;
@@ -2896,13 +2886,13 @@ int sym_is_iteration_limit_reached(sym_environment *env)
 int sym_is_time_limit_reached(sym_environment *env)
 {
 
-   switch(env->termcode){  
+   switch(env->termcode){
     case TM_TIME_LIMIT_EXCEEDED:
        return(TRUE);
     default:
        break;
    }
-   
+
    return(FALSE);
 }
 
@@ -2911,7 +2901,7 @@ int sym_is_time_limit_reached(sym_environment *env)
 
 int sym_is_target_gap_achieved(sym_environment *env)
 {
- 
+
    switch(env->termcode){
     case TM_TARGET_GAP_ACHIEVED:
     case TM_OPTIMAL_SOLUTION_FOUND:
@@ -2919,7 +2909,7 @@ int sym_is_target_gap_achieved(sym_environment *env)
     default:
        break;
    }
-   
+
    return(FALSE);
 }
 
@@ -2944,7 +2934,7 @@ int sym_get_num_cols(sym_environment *env, int *numcols)
    }
 
    *numcols = env->mip->n;
-   
+
    return(FUNCTION_TERMINATED_NORMALLY);
 }
 
@@ -2961,7 +2951,7 @@ int sym_get_num_rows(sym_environment *env, int *numrows)
    }
 
    *numrows = env->mip->m;
-   
+
    return(FUNCTION_TERMINATED_NORMALLY);
 }
 
@@ -2976,7 +2966,7 @@ int sym_get_num_elements(sym_environment *env, int *numelems)
       }
       return(FUNCTION_TERMINATED_ABNORMALLY);
    }
-   
+
    *numelems = env->mip->nz;
 
    return(FUNCTION_TERMINATED_NORMALLY);
@@ -3008,13 +2998,13 @@ int sym_get_col_upper(sym_environment *env, double *colub)
    if (!env->mip || !env->mip->n || !env->mip->ub){
       if(env->par.verbosity >= 1){
 	 printf("sym_get_col_upper():There is no loaded mip description or\n");
-	 printf("there is no loaded column description!\n");  
+	 printf("there is no loaded column description!\n");
       }
     return(FUNCTION_TERMINATED_ABNORMALLY);
    }
 
    memcpy(colub, env->mip->ub, DSIZE * env->mip->n);
-   
+
    return(FUNCTION_TERMINATED_NORMALLY);
 }
 
@@ -3032,7 +3022,7 @@ int sym_get_row_sense(sym_environment *env, char *rowsen)
    }
 
    memcpy(rowsen, env->mip->sense, CSIZE * env->mip->m);
-   
+
    return(FUNCTION_TERMINATED_NORMALLY);
 
 }
@@ -3051,7 +3041,7 @@ int sym_get_rhs(sym_environment *env, double *rowrhs)
    }
 
    memcpy(rowrhs, env->mip->rhs, DSIZE * env->mip->m);
-   
+
    return(FUNCTION_TERMINATED_NORMALLY);
 
 }
@@ -3059,17 +3049,17 @@ int sym_get_rhs(sym_environment *env, double *rowrhs)
 /*===========================================================================*/
 /*===========================================================================*/
 
-int sym_get_matrix(sym_environment *env, int *nz, int *matbeg, int *matind, 
+int sym_get_matrix(sym_environment *env, int *nz, int *matbeg, int *matind,
 		   double *matval)
 {
-   if (!env->mip || !env->mip->m || !env->mip->n || !env->mip->matbeg){   
+   if (!env->mip || !env->mip->m || !env->mip->n || !env->mip->matbeg){
       if(env->par.verbosity >= 1){
 	 printf("sym_get_rhs():There is no loaded mip description or\n");
-	 printf("there is no loaded matrix description!\n");      
+	 printf("there is no loaded matrix description!\n");
       }
       return(FUNCTION_TERMINATED_ABNORMALLY);
    }
-   
+
    *nz = env->mip->nz;
 
    memcpy(matbeg, env->mip->matbeg, ISIZE * (env->mip->n + 1));
@@ -3087,13 +3077,13 @@ int sym_get_row_range(sym_environment *env, double *rowrng)
    if (!env->mip || !env->mip->m){
       if(env->par.verbosity >= 1){
 	 printf("sym_get_row_range():There is no loaded mip description or\n");
-	 printf("there is no loaded row description!\n"); 
+	 printf("there is no loaded row description!\n");
       }
       return(FUNCTION_TERMINATED_ABNORMALLY);
    }
 
    memcpy(rowrng, env->mip->rngval, DSIZE * env->mip->m);
-   
+
    return(FUNCTION_TERMINATED_NORMALLY);
 
 }
@@ -3110,7 +3100,7 @@ int sym_get_row_lower(sym_environment *env, double *rowlb)
       }
       return(FUNCTION_TERMINATED_ABNORMALLY);
    }
-   
+
    double upper;
    int i;
    double rhs, range, inf = SYM_INFINITY;
@@ -3121,7 +3111,7 @@ int sym_get_row_lower(sym_environment *env, double *rowlb)
 	 rhs   = env->mip->rhs[i];
 	 range = env->mip->rngval[i];
 	 sense = env->mip->sense[i];
-	 
+
 	 switch (sense) {
 	  case 'E':
 	     rowlb[i] = upper = rhs;
@@ -3165,14 +3155,14 @@ int sym_get_row_upper(sym_environment *env, double *rowub)
    int i;
    double rhs, range, inf = SYM_INFINITY;
    char sense;
-   
+
    for ( i = env->mip->m - 1; i >= 0; --i )
       {
 
 	 rhs   = env->mip->rhs[i];
 	 range = env->mip->rngval[i];
 	 sense = env->mip->sense[i];
-	 
+
 	 switch (sense) {
 	  case 'E':
 	     lower = rowub[i] = rhs;
@@ -3229,7 +3219,7 @@ int sym_get_obj2_coeff(sym_environment *env, double *obj2)
       }
       return(FUNCTION_TERMINATED_ABNORMALLY);
    }
-  
+
    memcpy(obj2, env->mip->obj2, DSIZE*env->mip->n);
 
    return(FUNCTION_TERMINATED_NORMALLY);
@@ -3248,13 +3238,13 @@ int sym_get_obj_sense(sym_environment *env, int *sense)
    }
 
    *sense = 1;
-   
+
    if (env->mip->obj_sense == SYM_MAXIMIZE) {
       *sense = -1;
    }
 
    return(FUNCTION_TERMINATED_NORMALLY);
-}   
+}
 
 /*===========================================================================*/
 /*===========================================================================*/
@@ -3297,7 +3287,7 @@ int sym_is_binary(sym_environment *env, int index, int *value)
    }
 
    *value = FALSE;
-   
+
    if (env->mip->is_int[index] && env->mip->lb[index] == 0.0 &&
        env->mip->ub[index] == 1.0) {
       *value = TRUE;
@@ -3325,8 +3315,8 @@ int sym_is_integer(sym_environment *env, int index, char *value)
    }
 
    *value = env->mip->is_int[index];
-   
-   return(FUNCTION_TERMINATED_NORMALLY);   
+
+   return(FUNCTION_TERMINATED_NORMALLY);
 
 }
 
@@ -3360,13 +3350,13 @@ int sym_get_col_solution(sym_environment *env, double *colsol)
       if (!sol.has_sol){
 	 printf("sym_get_col_solution(): No solution has been stored!\n");
 	 return(FUNCTION_TERMINATED_ABNORMALLY);
-      }	 
+      }
       memset(colsol, 0, DSIZE*env->mip->n);
 
       for (i = 0; i < sol.xlength; i++){
 	 colsol[sol.xind[i]] = sol.xval[i];
       }
-      
+
       /*
       if(sol.xlength){
 	 if(!env->prep_mip){
@@ -3376,7 +3366,7 @@ int sym_get_col_solution(sym_environment *env, double *colsol)
 	 }else{
 	    for( i = 0; i<sol.xlength; i++){
 	       colsol[env->prep_mip->orig_ind[sol.xind[i]]] = sol.xval[i];
-	    }	    
+	    }
 	    for(i = 0; i < env->prep_mip->fixed_n; i++){
 	       colsol[env->prep_mip->fixed_ind[i]] =
 		  env->prep_mip->fixed_val[i];
@@ -3401,7 +3391,7 @@ int sym_get_sp_size(sym_environment *env, int *size)
    }
    return(FUNCTION_TERMINATED_NORMALLY);
 }
-   
+
 /*===========================================================================*/
 /*===========================================================================*/
 
@@ -3421,17 +3411,31 @@ int sym_get_sp_solution(sym_environment *env, int index, double *colsol,
       return(FUNCTION_TERMINATED_NORMALLY);
    }else{
       printf("sym_get_sp_solution(): No solution pool or");
-      printf("index out of bounds!\n"); 
+      printf("index out of bounds!\n");
       return(FUNCTION_TERMINATED_ABNORMALLY);
    }
 }
 
+
+/*===========================================================================*/
+/*===========================================================================*/
+
+int sym_get_solution(sym_environment *env, int index, sym_solutions *solution) {
+    if (index > env->nsolutions || !env->solutions ) {
+         printf("sym_get_sp_solution(): No solution pool or");
+        printf("index out of bounds!\n");
+        return(FUNCTION_TERMINATED_ABNORMALLY);
+    } else {
+        memcpy(solution, &env->solutions[index], sizeof(env->solutions[index]));
+        return(FUNCTION_TERMINATED_NORMALLY);
+    }
+}
 /*===========================================================================*/
 /*===========================================================================*/
 
 int sym_get_row_activity(sym_environment *env, double *rowact)
 {
-   double * colsol;  
+   double * colsol;
    int i, j;
 
    int * matbeg;
@@ -3453,13 +3457,13 @@ int sym_get_row_activity(sym_environment *env, double *rowact)
       FREE(colsol);
       return(FUNCTION_TERMINATED_ABNORMALLY);
    }
-   
+
    matbeg = env->mip->matbeg;
    matval = env->mip->matval;
    matind = env->mip->matind;
 
    memset(rowact, 0, DSIZE*env->mip->m);
-   
+
    for(i = 0; i<env->mip->n; i++){
       for(j = matbeg[i]; j<matbeg[i+1]; j++){
 	 rowact[matind[j]] += matval[j] * colsol[i];
@@ -3483,7 +3487,7 @@ int sym_get_obj_val(sym_environment *env, double *objval)
       *objval = (env->mip->obj_sense == SYM_MINIMIZE ? env->best_sol.objval :
 		 -env->best_sol.objval) +
 	 (env->prep_mip ? env->prep_mip->obj_offset : env->mip->obj_offset);
-   }else{ 
+   }else{
       if(env->par.verbosity >= 1){
 	 printf("sym_get_obj_val(): There is no solution!\n");
       }
@@ -3492,7 +3496,7 @@ int sym_get_obj_val(sym_environment *env, double *objval)
       for(i = 0; i<env->mip->n; i++){
 	 *objval += env->mip->obj[i] * env->mip->lb[i];
       }
-      *objval = env->mip->obj_sense == 
+      *objval = env->mip->obj_sense ==
 	 SYM_MINIMIZE ? *objval : -(*objval) ;
       return (FUNCTION_TERMINATED_ABNORMALLY);
    }
@@ -3511,7 +3515,7 @@ int sym_get_primal_bound(sym_environment *env, double *ub)
 	 printf("sym_get_primal_bound():There is no loaded mip description!\n");
       }
       return(FUNCTION_TERMINATED_ABNORMALLY);
-   } 
+   }
 
    if (env->has_ub){
       *ub = env->mip->obj_sense == SYM_MINIMIZE ? env->ub : -env->ub ;
@@ -3534,8 +3538,8 @@ int sym_get_iteration_count(sym_environment *env, int *numnodes)
       }
       return(FUNCTION_TERMINATED_ABNORMALLY);
    }
-   
-   *numnodes = env->warm_start->stat.analyzed;  
+
+   *numnodes = env->warm_start->stat.analyzed;
 
    return (FUNCTION_TERMINATED_NORMALLY);
 }
@@ -3561,7 +3565,7 @@ int sym_set_obj_coeff(sym_environment *env, int index, double value)
    }else{
       env->mip->obj[index] = value;
    }
-   
+
    if (env->mip->change_num){
       for(i = env->mip->change_num - 1 ; i >=0 ; i--){
 	 if (env->mip->change_type[i] == OBJ_COEFF_CHANGED){
@@ -3575,7 +3579,7 @@ int sym_set_obj_coeff(sym_environment *env, int index, double value)
    else{
       env->mip->change_type[env->mip->change_num++] = OBJ_COEFF_CHANGED;
    }
-   
+
    return(FUNCTION_TERMINATED_NORMALLY);
 }
 
@@ -3595,10 +3599,10 @@ int sym_set_obj2_coeff(sym_environment *env, int index, double value)
 
    if (env->mip->obj1 == NULL){
       env->mip->obj1 = (double *) malloc(env->mip->n*DSIZE);
-      memcpy(env->mip->obj1, env->mip->obj, DSIZE * env->mip->n); 
+      memcpy(env->mip->obj1, env->mip->obj, DSIZE * env->mip->n);
       env->mip->obj2 = (double *) calloc(env->mip->n, DSIZE);
    }
-   
+
    if (env->mip->obj_sense == SYM_MAXIMIZE){
       env->mip->obj2[index] = -value;
    }else{
@@ -3672,7 +3676,7 @@ int sym_set_col_upper(sym_environment *env, int index, double value)
    else{
       env->mip->change_type[env->mip->change_num++] = COL_BOUNDS_CHANGED;
    }
- 
+
    return(FUNCTION_TERMINATED_NORMALLY);
 }
 
@@ -3696,7 +3700,7 @@ int sym_set_row_lower(sym_environment *env, int index, double value)
    rhs   = env->mip->rhs[index];
    range = env->mip->rngval[index];
    sense = env->mip->sense[index];
-   
+
    switch (sense) {
     case 'E':
        lower = upper = rhs;
@@ -3743,9 +3747,9 @@ int sym_set_row_lower(sym_environment *env, int index, double value)
 	    sense = 'N';
 	    rhs = 0.0;
 	 }
-      }    
+      }
 
-      env->mip->sense[index] = sense;   
+      env->mip->sense[index] = sense;
       env->mip->rhs[index] = rhs;
       env->mip->rngval[index] = range;
    }
@@ -3765,8 +3769,8 @@ int sym_set_row_lower(sym_environment *env, int index, double value)
       env->mip->change_type[env->mip->change_num] = RHS_CHANGED;
       env->mip->change_num++;
    }
-   
-   return(FUNCTION_TERMINATED_NORMALLY);      
+
+   return(FUNCTION_TERMINATED_NORMALLY);
 }
 
 /*===========================================================================*/
@@ -3813,7 +3817,7 @@ int sym_set_row_upper(sym_environment *env, int index, double value)
    }
 
    /*   convertSenseToBound( sense, rhs, range, lower, upper );*/
-   
+
    if ( upper != value ) {
       upper = value;
       /* convertBountToSense */
@@ -3839,9 +3843,9 @@ int sym_set_row_upper(sym_environment *env, int index, double value)
 	    sense = 'N';
 	    rhs = 0.0;
 	 }
-      } 
-      
-      env->mip->sense[index] = sense;   
+      }
+
+      env->mip->sense[index] = sense;
       env->mip->rhs[index] = rhs;
       env->mip->rngval[index] = range;
    }
@@ -3864,15 +3868,15 @@ int sym_set_row_upper(sym_environment *env, int index, double value)
 
    }
 
-   return(FUNCTION_TERMINATED_NORMALLY);      
+   return(FUNCTION_TERMINATED_NORMALLY);
 }
 
 /*===========================================================================*/
 /*===========================================================================*/
 
-int sym_set_row_type(sym_environment *env, int index, char rowsense, 
+int sym_set_row_type(sym_environment *env, int index, char rowsense,
 		     double rowrhs, double rowrng)
-		     
+
 {
 
    int i;
@@ -3885,7 +3889,7 @@ int sym_set_row_type(sym_environment *env, int index, char rowsense,
       return(FUNCTION_TERMINATED_ABNORMALLY);
    }
 
-   env->mip->sense[index] = rowsense;   
+   env->mip->sense[index] = rowsense;
    env->mip->rhs[index] = rowrhs;
    env->mip->rngval[index] = rowrng;
 
@@ -3907,8 +3911,8 @@ int sym_set_row_type(sym_environment *env, int index, char rowsense,
       env->mip->change_num++;
 
    }
-   
-   return(FUNCTION_TERMINATED_NORMALLY);      
+
+   return(FUNCTION_TERMINATED_NORMALLY);
 }
 
 /*===========================================================================*/
@@ -3944,7 +3948,7 @@ int sym_set_obj_sense(sym_environment *env, int sense)
 
    //else - do nothing!
 
-   return(FUNCTION_TERMINATED_NORMALLY);      
+   return(FUNCTION_TERMINATED_NORMALLY);
 }
 
 /*===========================================================================*/
@@ -3953,7 +3957,7 @@ int sym_set_obj_sense(sym_environment *env, int sense)
 int sym_set_col_solution(sym_environment *env, double * colsol)
 {
    int i, j, nz = 0,*matBeg, *matInd;
-   double value, *rowAct = NULL, *matVal; 
+   double value, *rowAct = NULL, *matVal;
    char feasible;
    double lpetol =  9.9999999999999995e-07;
    lp_sol * sol;
@@ -3968,9 +3972,9 @@ int sym_set_col_solution(sym_environment *env, double * colsol)
 
    /* Feasibility Check*/
 
-   /* step 1. check for bounds and integrality */   
+   /* step 1. check for bounds and integrality */
    for (i = env->mip->n - 1; i >= 0; i--){
-      if (colsol[i] < env->mip->lb[i] - lpetol || 
+      if (colsol[i] < env->mip->lb[i] - lpetol ||
 	  colsol[i] > env->mip->ub[i] + lpetol)
 	 break;
       if (!env->mip->is_int[i])
@@ -3979,15 +3983,15 @@ int sym_set_col_solution(sym_environment *env, double * colsol)
       if (colsol[i] > env->mip->lb[i] && colsol[i] < env->mip->ub[i]
 	  && colsol[i]-floor(colsol[i]) > lpetol &&
 	  ceil(colsol[i])-colsol[i] > lpetol){
-	 break;  
+	 break;
       }
    }
 
    feasible = i < 0 ? true : false;
-   
+
    /* step 2. check for the constraint matrix */
-   
-   if (feasible){      
+
+   if (feasible){
       rowAct = (double*) calloc(env->mip->m, DSIZE);
       matBeg = env->mip->matbeg;
       matVal = env->mip->matval;
@@ -3997,11 +4001,11 @@ int sym_set_col_solution(sym_environment *env, double * colsol)
 	 for(j = matBeg[i]; j<matBeg[i+1]; j++){
 	    rowAct[matInd[j]] += matVal[j] * colsol[i];
 	 }
-      }	 
- 
+      }
+
       for(i = 0; i < env->mip->m; i++){
 	 switch(env->mip->sense[i]){
-	  case 'L': 
+	  case 'L':
 	     if (rowAct[i] > env->mip->rhs[i] + lpetol)
 		feasible = FALSE;
 	     break;
@@ -4010,12 +4014,12 @@ int sym_set_col_solution(sym_environment *env, double * colsol)
 		feasible = FALSE;
 	     break;
 	  case 'E':
-	     if (!((rowAct[i] > env->mip->rhs[i] - lpetol) && 
+	     if (!((rowAct[i] > env->mip->rhs[i] - lpetol) &&
 		   (rowAct[i] < env->mip->rhs[i] + lpetol)))
 		feasible = FALSE;
 	     break;
 	  case 'R':
-	     if (rowAct[i] > env->mip->rhs[i] + lpetol || 
+	     if (rowAct[i] > env->mip->rhs[i] + lpetol ||
 		 rowAct[i] < env->mip->rhs[i] - env->mip->rngval[i] - lpetol)
 		feasible = FALSE;
 	     break;
@@ -4023,8 +4027,8 @@ int sym_set_col_solution(sym_environment *env, double * colsol)
 	  default:
 	     break;
 	 }
-	 
-	 if (!feasible) 
+
+	 if (!feasible)
 	    break;
       }
    }
@@ -4043,27 +4047,27 @@ int sym_set_col_solution(sym_environment *env, double * colsol)
       FREE(sol->xind);
       FREE(sol->xval);
    }
-   
+
    sol->xlength = nz;
    sol->objval = 0.0;
    sol->has_sol = FALSE;
-   
+
    if(nz){
       sol->xval = (double*)calloc(nz,DSIZE);
       sol->xind = (int*)malloc(ISIZE*nz);
       memcpy(sol->xind, tmp_ind, ISIZE*nz);
       for (i = 0; i < nz; i++){
 	 sol->xval[i] = colsol[tmp_ind[i]];
-	 sol->objval += sol->xval[i] * env->mip->obj[tmp_ind[i]]; 
+	 sol->objval += sol->xval[i] * env->mip->obj[tmp_ind[i]];
       }
    }
 
    FREE(tmp_ind);
-   
+
    if (feasible){
       /* now, it is feasible, set the best_sol to colsol */
       //FIXME
-      
+
       if (env->has_ub_estimate){
 	 if (env->ub_estimate > sol->objval)
 	    env->ub_estimate = sol->objval; //no need for this, I guess.
@@ -4081,20 +4085,20 @@ int sym_set_col_solution(sym_environment *env, double * colsol)
 	 env->has_ub = TRUE;
 	 env->ub = sol->objval;
       }
-      sol->has_sol = TRUE; 
+      sol->has_sol = TRUE;
    }else{
       //      env->best_sol.objval = SYM_INFINITY;
       env->best_sol.objval = 0.0;
-   }  
+   }
 
    if (rowAct){
       FREE(rowAct);
    }
 
-   //env->mip->is_modified = FALSE; 
-   
+   //env->mip->is_modified = FALSE;
+
    return(feasible ? FUNCTION_TERMINATED_NORMALLY:
-	  FUNCTION_TERMINATED_ABNORMALLY);      
+	  FUNCTION_TERMINATED_ABNORMALLY);
 }
 
 /*===========================================================================*/
@@ -4135,7 +4139,7 @@ int sym_set_continuous(sym_environment *env, int index)
 
    env->mip->is_int[index] = FALSE;
 
-   return(FUNCTION_TERMINATED_NORMALLY);      
+   return(FUNCTION_TERMINATED_NORMALLY);
 }
 
 /*===========================================================================*/
@@ -4155,7 +4159,7 @@ int sym_set_integer(sym_environment *env, int index)
    env->mip->is_int[index] = TRUE;
    env->mip->var_type_modified = TRUE;
 
-   return(FUNCTION_TERMINATED_NORMALLY);      
+   return(FUNCTION_TERMINATED_NORMALLY);
 }
 /*===========================================================================*/
 /*===========================================================================*/
@@ -4180,23 +4184,23 @@ int sym_set_col_names(sym_environment * env, char **colname)
       }
       FREE(env->mip->colname);
    }
-   
+
    env->mip->colname = (char **)  calloc(sizeof(char *), env->mip->n);
-   
+
    for (j = 0; j < env->mip->n; j++){
       if(colname[j]){
-	 env->mip->colname[j] = (char *) malloc(CSIZE * MAX_NAME_SIZE); 
+	 env->mip->colname[j] = (char *) malloc(CSIZE * MAX_NAME_SIZE);
 	 strncpy(env->mip->colname[j], colname[j], MAX_NAME_SIZE);
 	 env->mip->colname[j][MAX_NAME_SIZE-1] = 0;
       }
-   }      
+   }
 
-   return(FUNCTION_TERMINATED_NORMALLY);      
+   return(FUNCTION_TERMINATED_NORMALLY);
 }
 /*===========================================================================*/
 /*===========================================================================*/
 
-int sym_add_col(sym_environment *env, int numelems, int *indices, 
+int sym_add_col(sym_environment *env, int numelems, int *indices,
 		double *elements, double collb, double colub,
 		double obj, char is_int, char *name)
 {
@@ -4218,7 +4222,7 @@ int sym_add_col(sym_environment *env, int numelems, int *indices,
    if(numelems){
       qsort_id(indices, elements, numelems);
    }
-   
+
    if(!env->mip->n && !env->mip->m){
       n = 1;
       if(numelems){
@@ -4231,17 +4235,17 @@ int sym_add_col(sym_environment *env, int numelems, int *indices,
 	 matBeg = NULL;
       }
       return(sym_explicit_load_problem(env, n, m, matBeg, indices, elements,
-				       &collb, &colub, &is_int, &obj, NULL, 
+				       &collb, &colub, &is_int, &obj, NULL,
 				       NULL, NULL, NULL, TRUE));
-				       
+
    } else{
 
       n = env->mip->n;
       nz = env->mip->nz;
-      
+
       user_indices = env->rootdesc->uind.list;
       user_size = &env->rootdesc->uind.size;
-      (*user_size) += 1; 
+      (*user_size) += 1;
       env->rootdesc->uind.list = (int *) malloc(ISIZE*(*user_size));
       memcpy(env->rootdesc->uind.list, user_indices, ISIZE*(*user_size - 1));
       env->rootdesc->uind.list[*user_size - 1] = n;
@@ -4273,26 +4277,26 @@ int sym_add_col(sym_environment *env, int numelems, int *indices,
       matBeg = (int*) calloc(ISIZE,(n+2));
 
       if(numelems){
-	 
+
 	 /* if it is out of row size? need additional rows!*/
 	 k = indices[numelems-1] + 1 - env->mip->m;
 	 if( k > 0){
 	    for(i=0; i<k; i++){
 	       sym_add_row(env, 0, NULL, NULL, 'N', 0.0, 0.0);
 	    }
-	 }	 	 
-	 
+	 }
+
 	 matInd = (int*) malloc(ISIZE*(nz+numelems));
 	 matVal = (double*) malloc(DSIZE*(nz+numelems));
 
 	 if(nz){
 	    memcpy(matInd, env->mip->matind, ISIZE*nz);
 	    memcpy(matVal, env->mip->matval, DSIZE*nz);
-	 }	    
+	 }
 
 	 memcpy(matInd + nz, indices, ISIZE*numelems);
-	 memcpy(matVal + nz, elements, DSIZE*numelems); 
-	    
+	 memcpy(matVal + nz, elements, DSIZE*numelems);
+
 	 FREE(env->mip->matind);
 	 FREE(env->mip->matval);
 	 env->mip->matind = matInd;
@@ -4334,16 +4338,16 @@ int sym_add_col(sym_environment *env, int numelems, int *indices,
       env->mip->obj = objN;
       env->mip->obj1 = obj1N;
       env->mip->obj2 = obj2N;
-      env->mip->is_int = isInt;   
+      env->mip->is_int = isInt;
 
       /* take care of the name */
-      
+
       if(env->mip->colname || name){
 	 colName = (char**) calloc(sizeof(char*),(n+1));
-	 if(env->mip->colname){	 
+	 if(env->mip->colname){
 	    for (i = 0; i < n; i++){
 	       if(env->mip->colname[i]){
-		  colName[i] = (char *) malloc(CSIZE * MAX_NAME_SIZE); 
+		  colName[i] = (char *) malloc(CSIZE * MAX_NAME_SIZE);
 		  strncpy(colName[i], env->mip->colname[i], MAX_NAME_SIZE);
 		  colName[i][MAX_NAME_SIZE-1] = 0;
 		  FREE(env->mip->colname[i]);
@@ -4352,18 +4356,18 @@ int sym_add_col(sym_environment *env, int numelems, int *indices,
 	 }
 
 	 if(name){
-	    colName[n] = (char *) malloc(CSIZE * MAX_NAME_SIZE); 	
+	    colName[n] = (char *) malloc(CSIZE * MAX_NAME_SIZE);
 	    strncpy(colName[n], name, MAX_NAME_SIZE);
 	    colName[n][MAX_NAME_SIZE-1] = 0;
 	 }
 
 	 FREE(env->mip->colname);
-	 env->mip->colname = colName;      
+	 env->mip->colname = colName;
       }
    }
 
    if (env->mip->change_num){
-      if(env->mip->change_type[0] == OBJ_COEFF_CHANGED){ /* will be treated 
+      if(env->mip->change_type[0] == OBJ_COEFF_CHANGED){ /* will be treated
 							    same for now */
 	 env->mip->change_type[0] = COLS_ADDED;
       }
@@ -4381,22 +4385,22 @@ int sym_add_col(sym_environment *env, int numelems, int *indices,
    }
 
    env->mip->new_col_num++;
-   env->mip->is_modified = TRUE; 
+   env->mip->is_modified = TRUE;
 
-   return(FUNCTION_TERMINATED_NORMALLY);      
+   return(FUNCTION_TERMINATED_NORMALLY);
 }
 
 /*===========================================================================*/
 /*===========================================================================*/
 
-int sym_add_row(sym_environment *env, int numelems, int *indices, 
+int sym_add_row(sym_environment *env, int numelems, int *indices,
 		double *elements, char rowsen, double rowrhs,
 		double rowrng)
 {
    int i, j, k, m, n, nz, *matBeg, *matInd, *lengths;
    double *matVal, *rhs, *range;
    char *sense;
-   
+
    if ((numelems && !indices) || numelems < 0){
       if(env->par.verbosity >= 1){
 	 printf("sym_add_row():Incorrect row description!\n");
@@ -4421,49 +4425,49 @@ int sym_add_row(sym_environment *env, int numelems, int *indices,
 	       matBeg[i+1] = matBeg[i] + 1;
 	       j++;
 	    }else{
-	       matBeg[i+1] = matBeg[i];	    
+	       matBeg[i+1] = matBeg[i];
 	    }
 	 }
 	 if(j!=numelems){
 	    printf("sym_add_row(): Unknown Problem!\n");
-	    return(FUNCTION_TERMINATED_ABNORMALLY);	    
+	    return(FUNCTION_TERMINATED_ABNORMALLY);
 	 }
       }else{
 	 n = 0;
 	 matBeg = NULL;
 	 matInd = NULL;
       }
-      return(sym_explicit_load_problem(env, n, m, matBeg, matInd, elements, 
-				       NULL, NULL, NULL, NULL, NULL, 
+      return(sym_explicit_load_problem(env, n, m, matBeg, matInd, elements,
+				       NULL, NULL, NULL, NULL, NULL,
 				       &rowsen, &rowrhs, &rowrng, TRUE));
    }else{
-      
+
       m = env->mip->m;
       nz = env->mip->nz;
-  
+
       env->base->cutnum +=1;
-            
+
       if(numelems){
 
 	 /* if it is out of row size? need additional rows!*/
 	 k = indices[numelems-1] + 1 - env->mip->n;
 	 if(k > 0){
 	    for(i = 0; i < k; i++){
-	       sym_add_col(env, 0, NULL, NULL, 0.0, SYM_INFINITY, 0.0, FALSE, 
+	       sym_add_col(env, 0, NULL, NULL, 0.0, SYM_INFINITY, 0.0, FALSE,
 			   NULL);
 	    }
-	    env->mip->is_modified = TRUE; 
-	 } 
+	    env->mip->is_modified = TRUE;
+	 }
 
 	 n = env->mip->n;
-	 
+
 	 matBeg = (int*) calloc (n+1, ISIZE);
 	 matInd = (int*) malloc(ISIZE*(nz+numelems));
-	 matVal = (double*) malloc(DSIZE*(nz+numelems));  
+	 matVal = (double*) malloc(DSIZE*(nz+numelems));
 	 lengths = (int*) calloc (ISIZE,n);
 
-	 if(env->mip->matbeg){	 
-	    for(i = 0; i<n; i++){     
+	 if(env->mip->matbeg){
+	    for(i = 0; i<n; i++){
 	       lengths[i] = env->mip->matbeg[i+1] - env->mip->matbeg[i];
 	    }
 	 }
@@ -4471,17 +4475,17 @@ int sym_add_row(sym_environment *env, int numelems, int *indices,
 	 for(i = 0; i<numelems; i++){
 	    lengths[indices[i]]++;
 	 }
-	 
+
 	 for(i = 0, j = 0; i<n; i++){
 	    matBeg[i+1] = matBeg[i] + lengths[i];
 	    if(env->mip->matbeg && env->mip->matind && env->mip->matval){
-	       memcpy(matInd + matBeg[i], env->mip->matind + 
-		      env->mip->matbeg[i], 
-		      ISIZE * (env->mip->matbeg[i+1]-env->mip->matbeg[i])); 
-	       memcpy(matVal + matBeg[i], env->mip->matval + 
-		      env->mip->matbeg[i], 
-		      DSIZE * (env->mip->matbeg[i+1]-env->mip->matbeg[i])); 
-		      
+	       memcpy(matInd + matBeg[i], env->mip->matind +
+		      env->mip->matbeg[i],
+		      ISIZE * (env->mip->matbeg[i+1]-env->mip->matbeg[i]));
+	       memcpy(matVal + matBeg[i], env->mip->matval +
+		      env->mip->matbeg[i],
+		      DSIZE * (env->mip->matbeg[i+1]-env->mip->matbeg[i]));
+
 	    }
 	    if (j < numelems && indices[j] == i){
 	       matInd[matBeg[i+1]-1] = m;
@@ -4489,29 +4493,29 @@ int sym_add_row(sym_environment *env, int numelems, int *indices,
 	       j++;
 	    }
 	 }
-	 
+
 	 if(j!=numelems){
 	    printf("sym_add_row(): Unknown Problem!\n");
-	    return(FUNCTION_TERMINATED_ABNORMALLY);	    
+	    return(FUNCTION_TERMINATED_ABNORMALLY);
 	 }
-	 
+
 	 /*can use FREE_mip_desc???*/
 	 FREE(env->mip->matbeg);
 	 FREE(env->mip->matind);
 	 FREE(env->mip->matval);
 	 FREE(lengths);
-	 
+
 	 env->mip->nz = nz + numelems;
 	 env->mip->matbeg = matBeg;
 	 env->mip->matind = matInd;
 	 env->mip->matval = matVal;
       }
-   
+
       sense = (char*) malloc(CSIZE*(m+1));
       rhs = (double*) malloc(DSIZE*(m+1));
       range = (double*) malloc(DSIZE*(m+1));
 
-      if(m){   
+      if(m){
 	 memcpy(sense, env->mip->sense, CSIZE*m);
 	 memcpy(range, env->mip->rngval, DSIZE*m);
 	 memcpy(rhs, env->mip->rhs, DSIZE*m);
@@ -4521,17 +4525,17 @@ int sym_add_row(sym_environment *env, int numelems, int *indices,
       sense[m] = rowsen;
       rhs[m] = rowrhs;
       range[m] = rowrng;
-      
+
       FREE(env->mip->sense);
       FREE(env->mip->rhs);
       FREE(env->mip->rngval);
-   
+
       env->mip->sense =  sense;
       env->mip->rhs = rhs;
       env->mip->rngval = range;
    }
 
-   return(FUNCTION_TERMINATED_NORMALLY);      
+   return(FUNCTION_TERMINATED_NORMALLY);
 }
 /*===========================================================================*/
 /*===========================================================================*/
@@ -4551,28 +4555,28 @@ int sym_delete_cols(sym_environment *env, int num, int * indices)
       return(FUNCTION_TERMINATED_NORMALLY);
    }
 
-   if (!env->mip || !env->mip->n || !env->base || !env->rootdesc || 
+   if (!env->mip || !env->mip->n || !env->base || !env->rootdesc ||
        num > env->mip->n || !env->mip->matbeg){
       if(env->par.verbosity >= 1){
-	 printf("sym_delete_cols(): No mip description has been loaded\n"); 
+	 printf("sym_delete_cols(): No mip description has been loaded\n");
       }
       return(FUNCTION_TERMINATED_ABNORMALLY);
    }
 
    int bvarnum = env->base->varnum, bind = 0;
    int user_size = env->rootdesc->uind.size, uind = 0;
-   int *bvar_ind = env->base->userind; 
+   int *bvar_ind = env->base->userind;
    int *user_ind = env->rootdesc->uind.list;
-   
+
    /* sort the indices in case they are not given sorted! */
 
    qsort_i(indices, num);
-   
+
    /* First, adjust the index lists */
    /* Warning: This resets the user indices to be equal to the real indices.
       This is usually fine for generic MIPS, but may not work for applications.
       Names stay the same, however */
-   
+
    n = env->mip->n;
 
    for (i = 0, j = 0; i < bvarnum && j < num; i++){
@@ -4597,19 +4601,19 @@ int sym_delete_cols(sym_environment *env, int num, int * indices)
 	 }else{
 	    user_ind[uind] = uind+bind;
 	    uind++;
-	 } 
+	 }
       }
       for (; i < n; i++){
 	 user_ind[uind] = uind+bind;
 	 uind++;
       }
    }
-	 
+
    if (j < num){
       printf("sym_delete_cols() Error: Column index may be out of range.\n");
       return(FUNCTION_TERMINATED_ABNORMALLY);
    }
-   
+
 #if 0
    if(i + j != n){
       printf("sym_delete_cols() Error: Unknown problem!\n");
@@ -4621,7 +4625,7 @@ int sym_delete_cols(sym_environment *env, int num, int * indices)
       printf("sym_delete_cols() Warning: No columns deleted.\n");
       return (FUNCTION_TERMINATED_NORMALLY);
    }
-   
+
    if (bind < bvarnum){
       env->base->userind = (int *) realloc (bvar_ind, ISIZE * bind);
       env->base->varnum = bind;
@@ -4632,15 +4636,15 @@ int sym_delete_cols(sym_environment *env, int num, int * indices)
    }
 
    /* Now adjust the MIP description */
-   
+
    lengths = (int*) malloc (ISIZE*n);
 
-   for (i = 0; i < n; i++){     
+   for (i = 0; i < n; i++){
       lengths[i] = env->mip->matbeg[i+1] - env->mip->matbeg[i];
    }
 
    nz = env->mip->nz;
-   
+
    for (i = 0; i < num; i++){
       if (indices[i] < n){
 	 num_to_delete += lengths[indices[i]];
@@ -4670,8 +4674,8 @@ int sym_delete_cols(sym_environment *env, int num, int * indices)
 	 continue;
       }
       matBeg[k+1] = matBeg[k] + lengths[i];
-      memmove(matInd + matBeg[k], matInd + matBeg[i], ISIZE * lengths[i]); 
-      memmove(matVal + matBeg[k], matVal + matBeg[i], DSIZE * lengths[i]); 
+      memmove(matInd + matBeg[k], matInd + matBeg[i], ISIZE * lengths[i]);
+      memmove(matVal + matBeg[k], matVal + matBeg[i], DSIZE * lengths[i]);
       colLb[k] = colLb[i];
       colUb[k] = colUb[i];
       objN[k] = objN[i];
@@ -4682,8 +4686,8 @@ int sym_delete_cols(sym_environment *env, int num, int * indices)
 
    for(; i < n; i++, k++){
       matBeg[k+1] = matBeg[k] + lengths[i];
-      memmove(matInd + matBeg[k], matInd + matBeg[i], ISIZE * lengths[i]); 
-      memmove(matVal + matBeg[k], matVal + matBeg[i], DSIZE * lengths[i]); 
+      memmove(matInd + matBeg[k], matInd + matBeg[i], ISIZE * lengths[i]);
+      memmove(matVal + matBeg[k], matVal + matBeg[i], DSIZE * lengths[i]);
       colLb[k] = colLb[i];
       colUb[k] = colUb[i];
       objN[k] = objN[i];
@@ -4700,12 +4704,12 @@ int sym_delete_cols(sym_environment *env, int num, int * indices)
 	 obj1N[k] = obj1N[i];
 	 k++;
       }
-      
+
       for(; i < n; i++, k++){
 	 obj1N[k] = obj1N[i];
       }
    }
-   
+
    if (obj2N){
       for(i = 0, j = 0, k = 0; j < num; i++){
 	 if (indices[j] == i){
@@ -4715,12 +4719,12 @@ int sym_delete_cols(sym_environment *env, int num, int * indices)
 	 obj2N[k] = obj2N[i];
 	 k++;
       }
-      
+
       for(; i < n; i++, k++){
 	 obj2N[k] = obj2N[i];
       }
    }
-   
+
    n = env->mip->n = n - num;
    nz = env->mip->nz = nz - num_to_delete;
    env->mip->matbeg = (int *) realloc(matBeg, (n+1)*ISIZE);
@@ -4734,9 +4738,9 @@ int sym_delete_cols(sym_environment *env, int num, int * indices)
 
    free(lengths);
 
-   env->mip->is_modified = TRUE; 
-   
-   return(FUNCTION_TERMINATED_NORMALLY);      
+   env->mip->is_modified = TRUE;
+
+   return(FUNCTION_TERMINATED_NORMALLY);
 
 }
 
@@ -4746,7 +4750,7 @@ int sym_delete_rows(sym_environment *env, int num, int * indices)
 {
 
    int i, j, k, n, m, nz, new_num_elements = 0, new_num_rows = 0;
-   int *matBeg, *matInd, *new_rows = 0; 
+   int *matBeg, *matInd, *new_rows = 0;
    double *matVal, *rhs, *range;
    char *sense;
 
@@ -4769,7 +4773,7 @@ int sym_delete_rows(sym_environment *env, int num, int * indices)
       /* We don't have a generic MIP description */
       return (FUNCTION_TERMINATED_NORMALLY);
    }
-   
+
    n = env->mip->n;
    m = env->mip->m;
    nz = env->mip->nz;
@@ -4803,10 +4807,10 @@ int sym_delete_rows(sym_environment *env, int num, int * indices)
       printf("sym_delete_rows() Error: Row index may be out of range.\n");
       return(FUNCTION_TERMINATED_ABNORMALLY);
    }
-   
+
    for (new_num_elements = 0, i = 0, j = 0; i < n; i++){
       for (; j < matBeg[i+1]; j++){
-	 if (new_rows[matInd[j]] < 0){	    
+	 if (new_rows[matInd[j]] < 0){
 	    continue;
 	 }else{
 	    matInd[new_num_elements] = new_rows[matInd[j]];
@@ -4833,17 +4837,17 @@ int sym_delete_rows(sym_environment *env, int num, int * indices)
 
    env->mip->m  = new_num_rows;
    env->mip->nz = new_num_elements;
-   
+
    env->mip->rhs    = (double *) realloc(rhs, DSIZE * new_num_rows);
    env->mip->sense  = (char *)   realloc(sense, CSIZE * new_num_rows);
    env->mip->rngval = (double *) realloc(range, DSIZE * new_num_rows);
-   
+
    env->mip->matval = (double *) realloc(matVal, DSIZE*new_num_elements);
    env->mip->matind = (int *)    realloc(matInd, ISIZE*new_num_elements);
 
    FREE(new_rows);
 
-   return(FUNCTION_TERMINATED_NORMALLY);      
+   return(FUNCTION_TERMINATED_NORMALLY);
 }
 
 /*===========================================================================*/
@@ -4851,7 +4855,7 @@ int sym_delete_rows(sym_environment *env, int num, int * indices)
 
 int sym_write_warm_start_desc(warm_start_desc *ws, char *file)
 {
- 
+
    FILE * f = NULL;
    int i, j;
    cut_data ** cuts;
@@ -4878,13 +4882,13 @@ int sym_write_warm_start_desc(warm_start_desc *ws, char *file)
       fprintf(f, " CUT INFO \n");
       fprintf(f, "########################################################\n");
       fprintf(f, " CUT_NUM             : %i\n", ws->cut_num);
-      fprintf(f, " ALLOCATED_CUT_NUM   : %i\n\n", 
+      fprintf(f, " ALLOCATED_CUT_NUM   : %i\n\n",
 	      ws->allocated_cut_num);
 
       //FIXME! WHAT TYPE A CUT CAN BE OTHER THAN EXPLICIT_ROW
 
       cuts = ws->cuts;
-      
+
       for(i=0; i<ws->cut_num; i++){
 	 fprintf(f, " CUT %i : \n",i);
 	 fprintf(f, " SIZE        : %i \n",cuts[i]->size);
@@ -4921,7 +4925,7 @@ int sym_write_warm_start_desc(warm_start_desc *ws, char *file)
       fprintf(f," LEAVES_BEFORE_TRIMMING : %i\n", stat.leaves_after_trimming);
       fprintf(f," NOT_FIXED_VARIABLE_NUM : %i\n", stat.vars_not_priced);
       fprintf(f," NF_STATUS_OF_ROOT      : %i\n\n", (int)stat.nf_status);
-     
+
       fprintf(f, "########################################################\n");
       fprintf(f, " COMPUTATION TIMES \n");
       fprintf(f, "########################################################\n");
@@ -4952,14 +4956,14 @@ int sym_write_warm_start_desc(warm_start_desc *ws, char *file)
       write_tree(ws->rootnode, f);
       fclose(f);
       return(FUNCTION_TERMINATED_NORMALLY);
-   }   
+   }
 }
 
 /*===========================================================================*/
 /*===========================================================================*/
 
 warm_start_desc * sym_read_warm_start(char *file)
-{   
+{
    FILE * f;
    char str[80];
    int i=0, j=0, num=0, ch=0;
@@ -4985,13 +4989,13 @@ warm_start_desc * sym_read_warm_start(char *file)
       fscanf(f,"%s %s %i", str, str, &ch);
       ws->has_ub = (char)ch;
       fscanf(f,"%s %s %lf", str, str, &ws->ub);
-      
+
       /* cut info */
       fscanf(f,"%s %s %s %s", str, str, str, str);
       fscanf(f,"%s %s %i", str, str, &ws->cut_num);
       fscanf(f,"%s %s %i", str, str, &temp);
       ws->allocated_cut_num = temp;
-      
+
       if (temp){
 	 ws->cuts = (cut_data **)malloc(temp *sizeof(cut_data *));
 	 for(i = 0; i < ws->cut_num; i++){
@@ -5000,11 +5004,11 @@ warm_start_desc * sym_read_warm_start(char *file)
 	    fscanf(f,"%s %s %i", str, str, &cut->size);
 	    cut->coef = (char*)malloc(CSIZE*cut->size);
 	    fscanf(f,"%s %s", str, str);
-	    
+
 	    for(j=0; j<cut->size; j++){
 	       fscanf(f,"%i", &ch);
 	       cut->coef[j] = (char)ch;
-	    } 
+	    }
 	    fscanf(f,"%s %s %lf", str, str, &cut->rhs);
 	    fscanf(f,"%s %s %lf", str, str, &cut->range);
 	    fscanf(f,"%s %s %i", str, str, &ch);
@@ -5015,11 +5019,11 @@ warm_start_desc * sym_read_warm_start(char *file)
 	    fscanf(f,"%s %s %i", str, str, &ch);
 	    cut->branch = (char)ch;
 	    fscanf(f,"%s %s %i", str, str, &cut->name);
-	    
+
 	    ws->cuts[i] = cut;
 	 }
       }
-      
+
       /* problem stats */
       fscanf(f,"%s %s %s %s", str, str, str, str);
       fscanf(f,"%s %s %lf", str, str, &stat.root_lb);
@@ -5034,10 +5038,10 @@ warm_start_desc * sym_read_warm_start(char *file)
       fscanf(f,"%s %s %i", str, str, &stat.leaves_after_trimming);
       fscanf(f,"%s %s %i", str, str, &stat.vars_not_priced);
       fscanf(f,"%s %s %i", str, str, &ch);
-      stat.nf_status = (char)ch; 
-      
+      stat.nf_status = (char)ch;
+
       ws->stat = stat;
-      
+
       /* computation times */
       fscanf(f,"%s %s %s %s", str, str, str, str);
       fscanf(f,"%s %s %lf", str, str, &compT.communication);
@@ -5056,17 +5060,17 @@ warm_start_desc * sym_read_warm_start(char *file)
       fscanf(f,"%s %s %lf", str, str, &compT.idle_cuts);
       fscanf(f,"%s %s %lf", str, str, &compT.start_node);
       fscanf(f,"%s %s %lf", str, str, &compT.cut_pool);
-      
+
       ws->comp_times = compT;
-      
+
       /* tree description */
       fscanf(f,"%s %s %s %s", str, str, str, str);
-      ws->rootnode = (bc_node*)calloc(1,sizeof(bc_node));	 
+      ws->rootnode = (bc_node*)calloc(1,sizeof(bc_node));
       read_tree(ws->rootnode, f);
    }
 
    fclose(f);
-   return(ws);   
+   return(ws);
 }
 
 /*===========================================================================*/
@@ -5091,14 +5095,14 @@ void sym_delete_warm_start(warm_start_desc *ws)
 	 }
 	 FREE(ws->cuts);
       }
-      
+
       if(ws->best_sol.xlength){
 	 FREE(ws->best_sol.xind);
 	 FREE(ws->best_sol.xval);
       }
       FREE(ws);
    }
-   
+
    ws = 0;
 }
 
@@ -5107,7 +5111,7 @@ void sym_delete_warm_start(warm_start_desc *ws)
 
 warm_start_desc * sym_get_warm_start(sym_environment *env, int copy_warm_start)
 {
-   
+
    warm_start_desc * ws;
 
    if (!env->warm_start){
@@ -5122,7 +5126,7 @@ warm_start_desc * sym_get_warm_start(sym_environment *env, int copy_warm_start)
    else{
       ws = env->warm_start;
       env->warm_start = 0;
-   }  
+   }
 
    return(ws);
 }
@@ -5137,11 +5141,11 @@ int sym_set_warm_start (sym_environment *env, warm_start_desc *ws)
       printf("sym_set_warm_start():The warm_start desc. is empty!\n");
       return(FUNCTION_TERMINATED_ABNORMALLY);
    }
-   
+
    warm_start_desc * ws_copy = create_copy_warm_start(ws);
    sym_delete_warm_start(env->warm_start);
    env->warm_start = ws_copy;
-   
+
    return(FUNCTION_TERMINATED_NORMALLY);
 }
 
@@ -5152,7 +5156,7 @@ int sym_set_int_param(sym_environment *env, const char *key, int value)
 {
    int termcode;
    char *line = (char*)malloc(CSIZE*(MAX_LINE_LENGTH+1));
-   sprintf(line, "%s %d", key, value);  
+   sprintf(line, "%s %d", key, value);
    termcode = set_param(env, line);
    FREE(line);
 
@@ -5166,7 +5170,7 @@ int sym_set_dbl_param(sym_environment *env, const char *key, double value)
 {
    int termcode;
    char *line = (char*)malloc(CSIZE*(MAX_LINE_LENGTH+1));
-   sprintf(line, "%s %.30f", key, value);  
+   sprintf(line, "%s %.30f", key, value);
    termcode = set_param(env, line);
    FREE(line);
 
@@ -5180,10 +5184,10 @@ int sym_set_str_param(sym_environment *env, const char *key, const char *value)
 {
    int termcode;
    char *line = (char*)malloc(CSIZE*(MAX_LINE_LENGTH+1));
-   sprintf(line, "%s %s", key, value);  
+   sprintf(line, "%s %s", key, value);
    termcode = set_param(env, line);
    FREE(line);
-   
+
    return(termcode);
 }
 
@@ -5197,7 +5201,7 @@ int sym_get_int_param(sym_environment *env, const char *key, int *value)
    lp_params *lp_par = &env->par.lp_par;
    cg_params *cg_par = &env->par.cg_par;
    cp_params *cp_par = &env->par.cp_par;
-   
+
    dg_params *dg_par = &env->par.dg_par;
 
    if (strcmp(key, "verbosity") == 0){
@@ -5208,7 +5212,7 @@ int sym_get_int_param(sym_environment *env, const char *key, int *value)
       *value = env->par.random_seed;
       return(0);
    }
-   
+
    /***********************************************************************
     ***                    Master params                            ***
     ***********************************************************************/
@@ -5270,7 +5274,7 @@ int sym_get_int_param(sym_environment *env, const char *key, int *value)
       *value = env->par.trim_warm_tree;
       return(0);
    }
-   
+
    /***********************************************************************
     ***                 DrawGraph params                            ***
     ***********************************************************************/
@@ -5458,7 +5462,7 @@ int sym_get_int_param(sym_environment *env, const char *key, int *value)
       *value = tm_par->colgen_strat[0];
       return(0);
    }
-   
+
    else if (strcmp(key, "colgen_in_second_phase") == 0 ||
 	    strcmp(key, "TM_colgen_in_second_phase") == 0){
       *value = tm_par->colgen_strat[1];
@@ -5487,7 +5491,7 @@ int sym_get_int_param(sym_environment *env, const char *key, int *value)
       *value = tm_par->tighten_root_bounds;
       return(0);
    }
-     
+
    /***********************************************************************
     ***                      LP params                              ***
     ***********************************************************************/
@@ -5589,7 +5593,7 @@ int sym_get_int_param(sym_environment *env, const char *key, int *value)
       *value = lp_par->max_not_fixable_to_add_max;
       return(0);
    }
-   
+
    else if (strcmp(key, "mat_col_compress_num") == 0 ||
 	    strcmp(key, "LP_mat_col_compress_num") == 0){
       *value = lp_par->mat_col_compress_num;
@@ -5658,7 +5662,7 @@ int sym_get_int_param(sym_environment *env, const char *key, int *value)
       *value = lp_par->max_cut_length;
       return(0);
    }
-   
+
    /* variable fixing params */
    else if (strcmp(key, "do_reduced_cost_fixing") == 0 ||
 	    strcmp(key, "LP_do_reduced_cost_fixing") == 0){
@@ -5732,7 +5736,7 @@ int sym_get_int_param(sym_environment *env, const char *key, int *value)
    }
    else if (strcmp(key, "generate_cgl_lift_and_project_cuts") == 0 ||
 	    strcmp(key, "LP_generate_cgl_lift_and_project_cuts") == 0){
-      *value = lp_par->cgl.generate_cgl_lift_and_project_cuts; 
+      *value = lp_par->cgl.generate_cgl_lift_and_project_cuts;
      return(0);
    }
    else if (strcmp(key, "generate_cgl_landp_cuts") == 0 ||
@@ -5792,7 +5796,7 @@ int sym_get_int_param(sym_environment *env, const char *key, int *value)
    }
    else if (strcmp(key, "generate_cgl_lift_and_project_cuts_freq") == 0 ||
 	    strcmp(key, "LP_generate_cgl_lift_and_project_cuts_freq") == 0){
-      *value = lp_par->cgl.generate_cgl_lift_and_project_cuts_freq; 
+      *value = lp_par->cgl.generate_cgl_lift_and_project_cuts_freq;
      return(0);
    }
    else if (strcmp(key, "generate_cgl_landp_cuts_freq") == 0 ||
@@ -5805,7 +5809,7 @@ int sym_get_int_param(sym_environment *env, const char *key, int *value)
       *value = lp_par->max_presolve_iter;
       return(0);
    }
-   
+
    /* user-defined function defaults */
    else if (strcmp(key, "is_feasible_default") == 0 ||
 	    strcmp(key, "LP_is_feasible_default") == 0){
@@ -5925,7 +5929,7 @@ int sym_get_int_param(sym_environment *env, const char *key, int *value)
       *value = lp_par->fp_max_cycles;
       return(0);
    }
-   
+
    /***********************************************************************
     ***                     cut_gen params                          ***
     ***********************************************************************/
@@ -5938,7 +5942,7 @@ int sym_get_int_param(sym_environment *env, const char *key, int *value)
       *value = cg_par->do_findcuts;
       return(0);
    }
-   
+
    /***********************************************************************
     ***                      cutpool params                         ***
     ***********************************************************************/
@@ -6009,9 +6013,9 @@ int sym_get_dbl_param(sym_environment *env, const char *key, double *value)
    lp_params *lp_par = &env->par.lp_par;
    //cg_params *cg_par = &env->par.cg_par;
    //cp_params *cp_par = &env->par.cp_par;
-   
+
    dg_params *dg_par = &env->par.dg_par;
-   
+
    if (strcmp(key, "granularity") == 0){
       *value = tm_par->granularity;
       return(0);
@@ -6051,7 +6055,7 @@ int sym_get_dbl_param(sym_environment *env, const char *key, double *value)
       *value = env->par.mc_binary_search_tolerance;
       return(0);
    }
-   
+
    /***********************************************************************
     ***                  Treemanager params                         ***
     ***********************************************************************/
@@ -6079,7 +6083,7 @@ int sym_get_dbl_param(sym_environment *env, const char *key, double *value)
       *value = tm_par->gap_limit;
       return(0);
    }
-   
+
    /***********************************************************************
     ***                      LP params                              ***
     ***********************************************************************/
@@ -6215,7 +6219,7 @@ int sym_get_dbl_param(sym_environment *env, const char *key, double *value)
       *value = lp_par->fp_min_gap;
       return(0);
    }
-   
+
 
    return (FUNCTION_TERMINATED_ABNORMALLY);
 }
@@ -6230,14 +6234,14 @@ int sym_get_str_param(sym_environment *env, const char *key, char **value)
    //lp_params *lp_par = &env->par.lp_par;
    //cg_params *cg_par = &env->par.cg_par;
    //cp_params *cp_par = &env->par.cp_par;
-   
+
    dg_params *dg_par = &env->par.dg_par;
-   
-   if (strcmp(key, "problem_name") == 0){      
+
+   if (strcmp(key, "problem_name") == 0){
       *value = env->probname;
       return(0);
-   }  
-   else if(strcmp(key, "infile_name") == 0){      
+   }
+   else if(strcmp(key, "infile_name") == 0){
       *value = env->par.infile;
       return(0);
    }
@@ -6252,7 +6256,7 @@ int sym_get_str_param(sym_environment *env, const char *key, char **value)
 	    strcmp(key, "dg_exe") == 0 ||
 	    strcmp(key, "M_dg_exe") == 0 ||
 	    strcmp(key, "M_dg_executable_name") == 0){
-      *value = env->par.dg_exe; 
+      *value = env->par.dg_exe;
       return(0);
    }
    else if (strcmp(key, "tm_machine") == 0 ||
@@ -6274,7 +6278,7 @@ int sym_get_str_param(sym_environment *env, const char *key, char **value)
    /***********************************************************************
     ***                 DrawGraph params                            ***
     ***********************************************************************/
-   
+
    else if (strcmp(key, "source_path") == 0 ||
 	    strcmp(key, "DG_source_path") == 0){
       *value = dg_par->source_path;
@@ -6305,7 +6309,7 @@ int sym_get_str_param(sym_environment *env, const char *key, char **value)
       *value = dg_par->edgeweight_font;
       return(0);
    }
-   
+
    /***********************************************************************
     ***                  Treemanager params                         ***
     ***********************************************************************/
@@ -6368,19 +6372,19 @@ sym_environment * sym_create_copy_environment (sym_environment *env)
 /*===========================================================================*/
 /*===========================================================================*/
 
-int sym_get_lb_for_new_rhs(sym_environment *env, int cnt, int *new_rhs_ind, 
+int sym_get_lb_for_new_rhs(sym_environment *env, int cnt, int *new_rhs_ind,
 			      double *new_rhs_val, double *lb_for_new_rhs)
 {
 #ifdef SENSITIVITY_ANALYSIS
 #ifdef USE_CGL_CUTS
    printf("sym_get_lb_for_new_rhs():\n");
-   printf("SYMPHONY can not do sensitivity analysis when cuts are present, for now!\n"); 
+   printf("SYMPHONY can not do sensitivity analysis when cuts are present, for now!\n");
    return(FUNCTION_TERMINATED_ABNORMALLY);
 #else
-   if (!env || !env->mip || 
-      !env->par.tm_par.sensitivity_analysis){ 
+   if (!env || !env->mip ||
+      !env->par.tm_par.sensitivity_analysis){
       printf("sym_get_lb_for_new_rhs():\n");
-      printf("Trying to read an empty problem, an empty problem description"); 
+      printf("Trying to read an empty problem, an empty problem description");
       printf(" or tree nodes were not kept in memory!\n");
       return(FUNCTION_TERMINATED_ABNORMALLY);
    }
@@ -6391,28 +6395,28 @@ int sym_get_lb_for_new_rhs(sym_environment *env, int cnt, int *new_rhs_ind,
 	 return(FUNCTION_TERMINATED_ABNORMALLY);
       }
       else{
-	 /* check if we only have the root node, then no need to call 
+	 /* check if we only have the root node, then no need to call
 	    recursive algorithm */
-	 int i; 
+	 int i;
 	 if(env->warm_start->stat.analyzed == 1) {
 	    *lb_for_new_rhs =  env->warm_start->rootnode->lower_bound;
-	    for(i=0; i<cnt; i++){ 
-	       *lb_for_new_rhs += 
+	    for(i=0; i<cnt; i++){
+	       *lb_for_new_rhs +=
 		  env->warm_start->rootnode->duals[new_rhs_ind[i]]*
 		  (new_rhs_val[i] - env->mip->rhs[new_rhs_ind[i]]);
-	    }	    
+	    }
 	 } else {
-	    *lb_for_new_rhs =  
-	       get_lb_for_new_rhs(env->warm_start->rootnode, env->mip, cnt, 
+	    *lb_for_new_rhs =
+	       get_lb_for_new_rhs(env->warm_start->rootnode, env->mip, cnt,
 				  new_rhs_ind, new_rhs_val);
 	 }
       }
-      return(FUNCTION_TERMINATED_NORMALLY);	 
+      return(FUNCTION_TERMINATED_NORMALLY);
    }
 #endif
 #else
    printf("sym_get_lb_for_new_rhs():\n");
-   printf("Sensitivity analysis features are not enabled.\n"); 
+   printf("Sensitivity analysis features are not enabled.\n");
    printf("Please rebuild SYMPHONY with these features enabled\n");
    return(FUNCTION_TERMINATED_ABNORMALLY);
 #endif
@@ -6421,17 +6425,17 @@ int sym_get_lb_for_new_rhs(sym_environment *env, int cnt, int *new_rhs_ind,
 /*===========================================================================*/
 /*===========================================================================*/
 
-int sym_get_ub_for_new_rhs(sym_environment *env, int cnt, int *new_rhs_ind, 
+int sym_get_ub_for_new_rhs(sym_environment *env, int cnt, int *new_rhs_ind,
 			   double *new_rhs_val, double *ub_for_new_rhs)
 {
 #ifdef SENSITIVITY_ANALYSIS
    int *matbeg = NULL, *matind = NULL, nz, i, j, k;
    double *matval = NULL;
 
-   if (!env || !env->mip || 
-       !env->par.tm_par.sensitivity_analysis){ 
+   if (!env || !env->mip ||
+       !env->par.tm_par.sensitivity_analysis){
       printf("sym_get_ub_for_new_rhs():\n");
-      printf("Trying to read an empty problem, an empty problem description"); 
+      printf("Trying to read an empty problem, an empty problem description");
       printf(" or tree nodes were not kept in memory!\n");
       return(FUNCTION_TERMINATED_ABNORMALLY);
    }
@@ -6443,36 +6447,36 @@ int sym_get_ub_for_new_rhs(sym_environment *env, int cnt, int *new_rhs_ind,
       }
       else{
 
-	 /* prepare to send a row oriented mip description in to 
-	    get_ub_for_new_rhs() */ 
-	 
+	 /* prepare to send a row oriented mip description in to
+	    get_ub_for_new_rhs() */
+
 	 matbeg = env->mip->matbeg;
 	 matind = env->mip->matind;
 	 matval = env->mip->matval;
-	 
+
 	 env->mip->matbeg = (int *) calloc(ISIZE, (env->mip->m+1));
 	 env->mip->matind = (int *) malloc (ISIZE* env->mip->nz);
 	 env->mip->matval = (double *) malloc (DSIZE* env->mip->nz);
-	 
+
 	 nz = 0;
 	 for(j = 0; j < env->mip->n; j++){
 	    for(i = 0; i < env->mip->m; i++){
 	       for(k = matbeg[i]; k < matbeg[i+1]; k++){
-		  if(matind[k] == j){	   
+		  if(matind[k] == j){
 		     env->mip->matind[nz] = i;
 		     env->mip->matval[nz] = matval[k];
-		     nz++;	  
+		     nz++;
 		     break;
 		  }
 	       }
-	    } 
+	    }
 	    env->mip->matbeg[j+1] = nz;
-	 }	      
-	 
-	 *ub_for_new_rhs =  
-	    get_ub_for_new_rhs(env->warm_start->rootnode, env->mip, cnt, 
+	 }
+
+	 *ub_for_new_rhs =
+	    get_ub_for_new_rhs(env->warm_start->rootnode, env->mip, cnt,
 			       new_rhs_ind, new_rhs_val);
-	 
+
 	 FREE(env->mip->matbeg);
 	 FREE(env->mip->matind);
 	 FREE(env->mip->matval);
@@ -6485,7 +6489,7 @@ int sym_get_ub_for_new_rhs(sym_environment *env, int cnt, int *new_rhs_ind,
    return(FUNCTION_TERMINATED_NORMALLY);
 #else
    printf("sym_get_ub_for_new_rhs():\n");
-   printf("Sensitivity analysis features are not enabled.\n"); 
+   printf("Sensitivity analysis features are not enabled.\n");
    printf("Please rebuild SYMPHONY with these features enabled\n");
    return(FUNCTION_TERMINATED_ABNORMALLY);
 #endif
@@ -6494,18 +6498,18 @@ int sym_get_ub_for_new_rhs(sym_environment *env, int cnt, int *new_rhs_ind,
 /*===========================================================================*/
 /*===========================================================================*/
 #if 0
-int sym_get_lb_for_new_obj(sym_environment *env, int cnt, 
-				 int *new_obj_ind, 
-				 double *new_obj_val, 
+int sym_get_lb_for_new_obj(sym_environment *env, int cnt,
+				 int *new_obj_ind,
+				 double *new_obj_val,
 				 double *lb_for_new_obj)
 {
 #ifdef SENSITIVITY_ANALYSIS
    double ub;
 
-   if (!env || !env->mip || 
-       !env->par.tm_par.sensitivity_analysis){ 
+   if (!env || !env->mip ||
+       !env->par.tm_par.sensitivity_analysis){
       printf("sym_get_lb_for_new_obj():\n");
-      printf("Trying to read an empty problem, an empty problem description"); 
+      printf("Trying to read an empty problem, an empty problem description");
       printf(" or tree nodes were not kept in memory!\n");
       return(FUNCTION_TERMINATED_ABNORMALLY);
    }
@@ -6516,10 +6520,10 @@ int sym_get_lb_for_new_obj(sym_environment *env, int cnt,
 	 return(FUNCTION_TERMINATED_ABNORMALLY);
       }
       else{
-	 ub = get_ub_for_new_obj(env->warm_start->rootnode, env->mip, cnt, 
+	 ub = get_ub_for_new_obj(env->warm_start->rootnode, env->mip, cnt,
 				 new_obj_ind, new_obj_val);
-	 *lb_for_new_obj =  
-	    get_lb_for_new_obj(env->warm_start->rootnode, env->mip, cnt, 
+	 *lb_for_new_obj =
+	    get_lb_for_new_obj(env->warm_start->rootnode, env->mip, cnt,
 			       new_obj_ind, new_obj_val);
 	 if(*lb_for_new_obj > ub){
 	    *lb_for_new_obj = ub;
@@ -6530,7 +6534,7 @@ int sym_get_lb_for_new_obj(sym_environment *env, int cnt,
    return(FUNCTION_TERMINATED_NORMALLY);
 #else
    printf("sym_get_lb_for_new_obj():\n");
-   printf("Sensitivity analysis features are not enabled.\n"); 
+   printf("Sensitivity analysis features are not enabled.\n");
    printf("Please rebuild SYMPHONY with these features enabled\n");
    return(FUNCTION_TERMINATED_ABNORMALLY);
 #endif
@@ -6539,16 +6543,16 @@ int sym_get_lb_for_new_obj(sym_environment *env, int cnt,
 /*===========================================================================*/
 /*===========================================================================*/
 
-int sym_get_ub_for_new_obj(sym_environment *env, int cnt, 
-				 int *new_obj_ind, 
-				 double *new_obj_val, 
+int sym_get_ub_for_new_obj(sym_environment *env, int cnt,
+				 int *new_obj_ind,
+				 double *new_obj_val,
 				 double *ub_for_new_obj)
 {
 #ifdef SENSITIVITY_ANALYSIS
-   if (!env || !env->mip || 
-       !env->par.tm_par.sensitivity_analysis){ 
+   if (!env || !env->mip ||
+       !env->par.tm_par.sensitivity_analysis){
       printf("sym_get_ub_for_new_obj():\n");
-      printf("Trying to read an empty problem, an empty problem description"); 
+      printf("Trying to read an empty problem, an empty problem description");
       printf(" or tree nodes were not kept in memory!\n");
       return(FUNCTION_TERMINATED_ABNORMALLY);
    }
@@ -6559,8 +6563,8 @@ int sym_get_ub_for_new_obj(sym_environment *env, int cnt,
 	 return(FUNCTION_TERMINATED_ABNORMALLY);
       }
       else{
-	 *ub_for_new_obj =  
-	    get_ub_for_new_obj(env->warm_start->rootnode, env->mip, cnt, 
+	 *ub_for_new_obj =
+	    get_ub_for_new_obj(env->warm_start->rootnode, env->mip, cnt,
 			       new_obj_ind, new_obj_val);
       }
    }
@@ -6568,7 +6572,7 @@ int sym_get_ub_for_new_obj(sym_environment *env, int cnt,
    return(FUNCTION_TERMINATED_NORMALLY);
 #else
    printf("sym_get_ub_for_new_obj():\n");
-   printf("Sensitivity analysis features are not enabled.\n"); 
+   printf("Sensitivity analysis features are not enabled.\n");
    printf("Please rebuild SYMPHONY with these features enabled\n");
    return(FUNCTION_TERMINATED_ABNORMALLY);
 #endif
@@ -6589,7 +6593,7 @@ int sym_test(sym_environment *env, int argc, char **argv, int *test_status)
      "misc07", "mitre", "mod008", "mod010", "mod011", "nw04", "p0033", "p0201",
      "p0282", "p0548", "p2756", "pp08a", "pp08aCUTS", "qnet1", "qnet1_o", "rentacar",
      "rgn", "stein27", "stein45", "vpm1", "vpm2" };
-  
+
   double sol[45] = {340160, 56137, 26374, 878430.316, 7.599, -2451377, 188182,
 		    -305.198, 568.10, 0, 405935.18, 3983, 1201500, 112313.363,
 		    25779856.371, 25779856.371, 27991042.647, 27991042.647, 21166,
@@ -6605,11 +6609,11 @@ int sym_test(sym_environment *env, int argc, char **argv, int *test_status)
 
   size_t size = 1000;
   char* buf = 0;
-  
+
   *test_status = 0;
 
   sym_parse_command_line(env, argc, argv);
-  
+
   verbosity = sym_get_int_param(env, "verbosity", &verbosity);
 
   while (true) {
@@ -6622,12 +6626,12 @@ int sym_test(sym_environment *env, int argc, char **argv, int *test_status)
   }
   char dirsep = buf[0] == '/' ? '/' : '\\';
   FREE(buf);
-  
-  if (strcmp(env->par.test_dir, "") == 0){ 
+
+  if (strcmp(env->par.test_dir, "") == 0){
      if (dirsep == '/')
 	strcpy(mps_dir, "../../Data/miplib3");
-     else 
-	strcpy(mps_dir, "..\\..\\Data\\miplib3");	
+     else
+	strcpy(mps_dir, "..\\..\\Data\\miplib3");
   } else{
     strcpy(mps_dir, env->par.test_dir);
   }
@@ -6638,18 +6642,18 @@ int sym_test(sym_environment *env, int argc, char **argv, int *test_status)
     if (dirsep == '/')
        sprintf(infile, "%s%s%s", mps_dir, "/", mps_files[i]);
     else
-       sprintf(infile, "%s%s%s", mps_dir, "\\", mps_files[i]);   
+       sprintf(infile, "%s%s%s", mps_dir, "\\", mps_files[i]);
     if((termcode = sym_read_mps(env, infile)) < 0)
       return(termcode);
 
     printf("\nSolving %s...\n\n", mps_files[i]);
-    
+
     if((termcode = sym_solve(env)) < 0)
       return(termcode);
 
     sym_get_obj_val(env, &obj_val[i]);
 
-    if((obj_val[i] < sol[i] + tol) && 
+    if((obj_val[i] < sol[i] + tol) &&
        (obj_val[i] > sol[i] - tol)){
       printf("\nSuccess! %s solved correctly...\n\n", mps_files[i]);
     } else {
@@ -6666,6 +6670,6 @@ int sym_test(sym_environment *env, int argc, char **argv, int *test_status)
   sym_set_int_param(env, "verbosity", verbosity);
 
   return(termcode);
-  
+
 }
 

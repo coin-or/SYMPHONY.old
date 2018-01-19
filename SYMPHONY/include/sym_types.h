@@ -16,7 +16,7 @@
 #define _BB_TYPES_H
 
 #define MAX_CHILDREN_NUM 4
-#define MAX_CHANGE_NUM 6  
+#define MAX_CHANGE_NUM 6
 
 /*===========================================================================*\
  * This file contains those type definitions which are used in more than one
@@ -28,12 +28,12 @@
 #endif
 
 #include "sym_proto.h"
-#include "sym_constants.h" 
+#include "sym_constants.h"
 
 typedef struct LP_SOL{
    int            lp;          /* the tid of the lp process asssociated with
 				  the current solution */
-   int            has_sol;     /* indicates whether a feasible solution 
+   int            has_sol;     /* indicates whether a feasible solution
 				  found*/
    int            xlength;     /* the number of nonzeros in the lp solution
 				  currently being processed*/
@@ -72,7 +72,7 @@ typedef struct CUT_DATA{
 				  packed form. The types of the cut tells how
 				  to "unpack" it */
    double         rhs;         /* the right hand side for the constraint*/
-   double         range;   
+   double         range;
    char           type;        /* the type of cut */
    char           sense;       /* sense of the cut constraint */
    char           deletable;   /* whether or not this cut should be removed
@@ -117,18 +117,18 @@ typedef struct VAR_DESC{
    char           is_int; /* whether or not the variable is integer */
 }var_desc;
 
-/*========================================================================*\ 
- * changes in bounds of variables at a node are stored here. 
- * Only the changes pertaining to this node are stored here. changes in 
+/*========================================================================*\
+ * changes in bounds of variables at a node are stored here.
+ * Only the changes pertaining to this node are stored here. changes in
  * parents are not stored with children. Variable bounds can changed due to
  * reduced cost fixing, cuts etc.
- \*========================================================================*/ 
-typedef struct BOUNDS_CHANGE_DESC{ 
+ \*========================================================================*/
+typedef struct BOUNDS_CHANGE_DESC{
    int                 num_changes; /* how many bounds changed */
    int                *index;       /* max size 2*n */
-   char               *lbub;        /* ub or lb? */ 
+   char               *lbub;        /* ub or lb? */
    double             *value;       /* new bound value */
-}bounds_change_desc; 
+}bounds_change_desc;
 
 
 typedef struct BRANCH_DESC{
@@ -149,7 +149,7 @@ typedef struct BRANCH_DESC{
 typedef struct ARRAY_DESC{
    char           type;        /* NO_DATA_STORED, EXPLICIT_LIST, WRT_PARENT */
    int            size;
-   int            added; 
+   int            added;
    int           *list;
 }array_desc;
 
@@ -162,7 +162,7 @@ typedef struct DOUBLE_ARRAY_DESC{
 
 typedef struct BASIS_DESC{
    char                basis_exists;
-   
+
    /*========================================================================*\    * Notes:
     *  1) for base...:
     *     if list is non-NULL then it refers to col/row inds, not userinds
@@ -196,7 +196,7 @@ typedef struct NODE_DESC{
    cut_data     **cuts;        /* this is not used in TM anyway. */
 #endif
 
-   bounds_change_desc *bnd_change; /* changes in variable bounds that happen 
+   bounds_change_desc *bnd_change; /* changes in variable bounds that happen
                                      during the processing of the node */
 
    /* Any additional info the user might want to pass */
@@ -209,13 +209,13 @@ typedef struct NODE_DESC{
 
 typedef struct BRANCH_OBJ{
    char          type;         /* Type of the candidate */
-#if defined(COMPILING_FOR_LP) || defined(COMPILE_IN_LP) 
+#if defined(COMPILING_FOR_LP) || defined(COMPILE_IN_LP)
    int           position;     /* The position of the candidate */
    waiting_row  *row;          /* Description of the left hand side; makes
 				  sense only for branching cuts */
 #endif
    int           child_num;    /* Number of kids */
-#if defined(COMPILING_FOR_TM) || defined(COMPILING_FOR_MASTER) || defined(COMPILE_IN_LP) 
+#if defined(COMPILING_FOR_TM) || defined(COMPILING_FOR_MASTER) || defined(COMPILE_IN_LP)
    int           name;         /* userind for VAR, the index for CUT */
 #endif
    double        value;        /* for evaluating pcost */
@@ -254,7 +254,7 @@ typedef struct BRANCH_OBJ{
 #endif
 #endif
 
-#if defined(COMPILING_FOR_LP) || defined(COMPILE_IN_LP) 
+#if defined(COMPILING_FOR_LP) || defined(COMPILE_IN_LP)
    double        lhs;          /* purely for the user */
 
 #ifdef MAX_CHILDREN_NUM
@@ -276,10 +276,10 @@ typedef struct BRANCH_OBJ{
    int          *sol_sizes;
    int         **sol_inds;
    double      **solutions;
-#ifdef SENSITIVITY_ANALYSIS   
+#ifdef SENSITIVITY_ANALYSIS
    double      **duals;
 #endif
-   
+
 }branch_obj;
 
 /*===========================================================================*/
@@ -355,15 +355,15 @@ typedef struct PROB_TIMES{
 }prob_times;
 
 /*===========================================================================*\
- * The bc_node data structure stores the information needed to     
- * process a node in the branch and cut tree                            
+ * The bc_node data structure stores the information needed to
+ * process a node in the branch and cut tree
 \*===========================================================================*/
 
 typedef struct BC_NODE{
    int        bc_index;     /* the identifier of the node */
    int        bc_level;     /* the level in the tree of the node */
    int        iter_num;     /* cuts/cgl iteration number */
-   
+
    int        lp;           /* the tid of the lp processing the node */
    int        cg;           /* the tid of the cut generator serving the node */
    int        cp;           /* the tid of the cut pool assigned to the node */
@@ -393,7 +393,7 @@ typedef struct BC_NODE{
 
 #ifdef TRACE_PATH
    char       optimal_path;
-#endif 
+#endif
 
    /* usage of different tools in process chain: fp, cuts, strong branching */
    int         num_cut_iters_in_path;
@@ -408,10 +408,10 @@ typedef struct BC_NODE{
    double      avg_br_obj_impr_in_path;
    char        used_str;
    int         t_cnt;
-   
+
    int         num_fp_calls_in_path;
    int         frac_cnt;
-   double      frac_avg; 
+   double      frac_avg;
 }bc_node;
 
 /*===========================================================================*\
@@ -441,7 +441,7 @@ typedef struct PROBLEM_STAT{
    int         nf_status;          /* nf_status of the root node after
 				      repricing */
    double      max_vsize;
-   int         print_stats_cnt; 
+   int         print_stats_cnt;
 }problem_stat;
 
 /*===========================================================================*/
@@ -452,7 +452,7 @@ typedef struct LP_STAT{
    int         lp_node_calls; /* total lp_calls in node processing */
    int         lp_sols;
    int         ip_sols;
-   int         lp_iter_num; 
+   int         lp_iter_num;
    int         lp_total_iter_num; /* number of total simplex iterations */
    int         lp_max_iter_num; /* max of lps' simplex iterations */
    int         str_br_lp_calls; /* no of calls from strong branching */
@@ -460,13 +460,13 @@ typedef struct LP_STAT{
    int         str_br_nodes_pruned; /* no of nodes pruned by strong br */
    int         str_br_total_iter_num; /* number of total simplex iterations by
 					 strong br*/
-   int         prep_bnd_changes; 
+   int         prep_bnd_changes;
    int         prep_nodes_pruned;
-   
+
    int         rel_br_full_solve_num;
    int         rel_br_pc_up_num;
    int         rel_br_up_update;
-   int         rel_br_pc_down_num; 
+   int         rel_br_pc_down_num;
    int         rel_br_down_update;
    int         rel_br_impr_num;
    /* cuts */
@@ -483,7 +483,7 @@ typedef struct LP_STAT{
    int         lift_and_project_cuts;
    int         landp_cuts;
    int         redsplit_cuts;
-   
+
    int         cuts_root;
    int         gomory_cuts_root;
    int         knapsack_cuts_root;
@@ -497,7 +497,7 @@ typedef struct LP_STAT{
    int         lift_and_project_cuts_root;
    int         landp_cuts_root;
    int         redsplit_cuts_root;
-   
+
    int         num_poor_cuts;
    int         num_duplicate_cuts;
    int         num_unviolated_cuts;
@@ -505,7 +505,7 @@ typedef struct LP_STAT{
    int         cuts_deleted_from_lps;
 
    int         gomory_calls;
-   int         gomory_nz; 
+   int         gomory_nz;
    int         knapsack_calls;
    int         oddhole_calls;
    int         clique_calls;
@@ -525,7 +525,7 @@ typedef struct LP_STAT{
    int         fp_poor_sols;
    int         fp_lp_total_iter_num;
    int         fp_num_iter;
-   int         fp_last_call_ind;  
+   int         fp_last_call_ind;
 
    /* rounding heuristic*/
    int         rh_calls;
@@ -536,7 +536,7 @@ typedef struct LP_STAT{
    int         sh_calls;
    int         sh_num_sols;
    int         sh_last_call_ind;
- 
+
    /* local search */
    int         ls_calls;
    int         ls_num_sols;
@@ -549,14 +549,14 @@ typedef struct LP_STAT{
    int         ds_type_num_sols[DIVING_HEURS_CNT];
    int         ds_type_num_iter[DIVING_HEURS_CNT];
    int         ds_num_iter;
-   int         ds_last_call_ind; 
- 
+   int         ds_last_call_ind;
+
    /* fix-and-relax */
    int         fr_calls;
    int         fr_num_sols;
    int         fr_last_call_ind;
    int         fr_analyzed_nodes;
-   int         fr_last_sol_call;   
+   int         fr_last_sol_call;
 
    /* rins search */
    int         rs_calls;
@@ -571,7 +571,7 @@ typedef struct LP_STAT{
    int         lb_last_call_ind;
    int         lb_analyzed_nodes;
    int         lb_last_sol_call;
-   
+
    /* usage of different tools in process chain: fp, cuts, strong branching */
    int         num_cut_iters_in_path;
    int         num_cuts_added_in_path;
@@ -611,18 +611,18 @@ typedef struct COL_IMP{
 
 }col_imp;
 
-typedef struct IMPVAR{   
-   
+typedef struct IMPVAR{
+
    int  type; /* ROW, COL */
-   int  ind; 
+   int  ind;
    int  fix_type; /*'U', 'L, 'F'
 		    for column: improve upper bound, lower bound or fix it
-		    for row: all other variables need to be fixed to their 
+		    for row: all other variables need to be fixed to their
 		    'U or 'L' or the row is infea'S'ible
-		    however, right now it is same with fix_bounds */  
+		    however, right now it is same with fix_bounds */
    double val; /* if it is a column impl*/
    struct IMPVAR *right;
-   struct IMPVAR *left;   
+   struct IMPVAR *left;
 
 }IMPvar;
 
@@ -630,45 +630,45 @@ typedef struct IMPLIST{
 
    int size;
    IMPvar * head;
-   IMPvar * tail;   
+   IMPvar * tail;
 }IMPlist;
 
 /*===========================================================================*/
 /* Data structure to keep relevant info of a column */
 /*===========================================================================*/
 typedef struct COLINFO{
-   int rank; 
+   int rank;
    int coef_type; /* all integer, all binary, fractional
 			 - considering the type of coefficients*/
    int sign_type; /* same below */
-   char var_type; /* '*C'ontinuous, 
-		     *'B'inary, 
-		     *'general 'I'nteger, 
-                     *'F'ixed, 
-		     *'Z'-continous but can be integerized 
+   char var_type; /* '*C'ontinuous,
+		     *'B'inary,
+		     *'general 'I'nteger,
+                     *'F'ixed,
+		     *'Z'-continous but can be integerized
 
 		        -those should only appear during preprocessor stage-
-                     *negative bina'R'y, 
-		     *fixable to its 'U'pper bound, 
+                     *negative bina'R'y,
+		     *fixable to its 'U'pper bound,
 		     *fixable to its 'L'ower bound,
-		        -for the last two, need to use is_int to see if 
+		        -for the last two, need to use is_int to see if
 		         they are integer or not-
-		     *'T'emporarily fixed, 
-		     * binary variable and temprarily fixed to 
- 		       its 'l'ower bound, simiarly, 
-		       temporarily fixed to its 'u'pper bound		     
+		     *'T'emporarily fixed,
+		     * binary variable and temprarily fixed to
+ 		       its 'l'ower bound, simiarly,
+		       temporarily fixed to its 'u'pper bound
 		     */
    int sos_num;      /* #of sos rows that this var appears in */
    int col_size;     /* col size */
-   int nz;           /* sum of row_sizes this var appears in */  
+   int nz;           /* sum of row_sizes this var appears in */
    int fix_row_ind; /* state which row caused to fix this variable during
 		       basic preprocessor */
-		    
-   IMPlist *ulist;  /* for binary variables: keeps the list of variables 
-		       fixed or bounds improved if this variable is fixed to 
+
+   IMPlist *ulist;  /* for binary variables: keeps the list of variables
+		       fixed or bounds improved if this variable is fixed to
 		       its upper bound */
    IMPlist *llist;  /* same here - lower side */
-   
+
 }COLinfo;
 
 /*===========================================================================*/
@@ -676,16 +676,16 @@ typedef struct COLINFO{
 /*===========================================================================*/
 typedef struct ROWINFO{
    int type; /* all mixed, binary, pure(not binary), cont_binary... */
-   int bound_type;  /* all_bounded, mixed 
+   int bound_type;  /* all_bounded, mixed
 			   - considering the bounds of variables */
    int coef_type; /* all integer, all binary, fractional
 			 - considering the type of coefficients*/
-   int sign_type; /* all_pos, all_neg, mixed */ 
+   int sign_type; /* all_pos, all_neg, mixed */
 
    char is_sos_row;
    char * sos_rep;  /* compact representation of the sos row for bitwise
 		       operations */
-   
+
    /* for preprocessor */
 
    double fixed_obj_offset; /* obtained from fixed vars */
@@ -699,23 +699,23 @@ typedef struct ROWINFO{
 
    double orig_ub; /* for debugging purposes */
    double orig_lb;
-   
-   int free_var_num; 
-   
-   int ub_inf_var_num; /* number of variables in this row those cause 
+
+   int free_var_num;
+
+   int ub_inf_var_num; /* number of variables in this row those cause
 			  ub to be infinite */
    int lb_inf_var_num; /* number of variables in this row those cause
 			  lb to be infinite */
-   int size; 
+   int size;
    int fixed_var_num; /* number of fixed variables on this row*/
    int fixable_var_num; /* number of fixable variables on this row*/
    int bin_var_num; /*not fixed binary variables */
    int cont_var_num; /*not fixed continuous variables */
-   int frac_coef_num; /* not fixed, frac coeffs on this row */   
+   int frac_coef_num; /* not fixed, frac coeffs on this row */
    int row_coef_bin_cnt;
    int row_sign_pos_cnt;
-   
-   char is_redundant; 
+
+   char is_redundant;
    char is_updated;
    char vars_checked;
 
@@ -725,19 +725,19 @@ typedef struct ROWINFO{
 /* Data structure to collect information about the model   */
 /*===========================================================================*/
 
-typedef struct MIPINFO{ 
+typedef struct MIPINFO{
    int prob_type; /* mixed, pure(not binary), binary... */
    int cont_var_num;
    int binary_var_num;
    int binary_var_nz;
-   int fixed_var_num; 
+   int fixed_var_num;
    int integerizable_var_num;
-   int max_row_size; 
-   int max_col_size; 
+   int max_row_size;
+   int max_col_size;
    int obj_size;  /* number of nonzeros in objective function */
 
-   char is_opt_val_integral; /*is the optimal 
-			   solution value required to be integral, if one 
+   char is_opt_val_integral; /*is the optimal
+			   solution value required to be integral, if one
 			   exists*/
 
    double sum_obj_offset; /* from fixed variables*/
@@ -762,14 +762,14 @@ typedef struct MIPINFO{
    double col_density;
    double sos_bin_row_ratio;
    double bin_row_ratio;
-  
-   int    e_row_num; 
-   int    l_row_num; 
-   int    g_row_num; 
-   int    r_row_num; 
-  
+
+   int    e_row_num;
+   int    l_row_num;
+   int    g_row_num;
+   int    r_row_num;
+
    ROWinfo *rows;
-   COLinfo *cols;  
+   COLinfo *cols;
 
    int c_alloc_size;
    int c_alloc_num;
@@ -782,8 +782,8 @@ typedef struct MIPINFO{
    int c_nz;
    int *c_tmp;
    int prob_num;
-   
-}MIPinfo; 
+
+}MIPinfo;
 
 /*===========================================================================*/
 
@@ -801,11 +801,11 @@ typedef struct MIPDIFF
    int *vars_fixed_ind;
    int *bounds_tightened_ind;
    int *bounds_integerized_ind;
-   int *coef_changed_col_ind; 
-   int *coef_changed_row_ind; 
+   int *coef_changed_col_ind;
+   int *coef_changed_row_ind;
 }MIPdiff;
 
-#endif 
+#endif
 
 /*===========================================================================*/
 /* This structure stores the user's description of the model */
@@ -830,21 +830,21 @@ typedef struct MIPDESC{
    double     obj_offset;  /* constant to be added to the objective function.*/
    char       obj_sense;   /* objective sense. */
 
-   int        alloc_n;     /* allocated dims */ 
+   int        alloc_n;     /* allocated dims */
    int        alloc_m;
    int        alloc_nz;
 
    int        fixed_zero;   /* only used if preprocessor is used - fixed vars*/
    int        fixed_n;      /* fixed vars to nonzero vals */
-   int       *fixed_ind;    
-   double    *fixed_val; 
+   int       *fixed_ind;
+   double    *fixed_val;
 
    int        subs_n;       /* only used if preprocessor is used - substitutions*/
    int       *subs_ind;
    double    *subs_aval;
-   double    *subs_rhs; 
+   double    *subs_rhs;
 
-   int        subs_alloc_size; 
+   int        subs_alloc_size;
    int       *subs_rbeg;
    int       *subs_rind;
    double    *subs_rval;
@@ -852,10 +852,10 @@ typedef struct MIPDESC{
    int        aggr_n;      /* only used if preprocessor is used - aggregations*/
    int       *aggr_ind;
    int       *aggr_to_ind;
-   
+
    /* Only to be allocated and used by SYMPHONY */
 
-   int       *col_lengths;   
+   int       *col_lengths;
    int       *row_matbeg;      /* m */  /* a row ordered desc for heuristics */
    int       *row_matind;      /* nz */
    double    *row_matval;      /* nz */
@@ -864,22 +864,22 @@ typedef struct MIPDESC{
    char      *orig_sense;
    int       *orig_ind; /*mapping of indices of presolved model into orig one
 			 */
-   
+
    int        var_type_modified;  /* number of updates on the mip desc */
    int        change_num;  /* number of updates on the mip desc */
    int        change_type[MAX_CHANGE_NUM];  /* type of the mip desc. changes */
    int        new_col_num; /* used only when new cols added */
    int        cru_vars_num;
-   int       *cru_vars; 
-   char       is_modified;         
-   
+   int       *cru_vars;
+   char       is_modified;
+
    /* will be evaluated only if preprocessor is used */
    /* it is here to be carried later for further use */
    /* mip info */
-   MIPinfo   *mip_inf; 
-   
+   MIPinfo   *mip_inf;
+
    //  MIPdiff *mip_diff;
-   double * opt_sol;   
+   double * opt_sol;
 }MIPdesc;
 
 /*===========================================================================*\
@@ -912,23 +912,42 @@ typedef struct SP_SOLUTION_DESC{
    int            xlength;
    int           *xind;
    double        *xval;
-  
+
    /* The bnb node where this solution was discoverd*/
    int            node_index;
-  
+
    /* The level of the node in bnb tree where this solution was discovered */
-    int            node_level;  
+    int            node_level;
 }sp_solution;
 
 /*===========================================================================*/
 
 typedef struct SP_DESC{
    /* max. no. of solutions in the pool */
-   int            max_solutions; 
+   int            max_solutions;
    /* no. of solutions in the pool */
    int            num_solutions;
    int            total_num_sols_found;
    /* array of those solutions */
    sp_solution    **solutions;
 }sp_desc;
+
+
+
+/*===========================================================================*/
+
+typedef struct SOLUTION_PAIRS{
+   int solution1;
+   int solution2;
+   double gamma1;
+   double gamma2;
+}solution_pairs;
+
+/*===========================================================================*/
+
+ typedef struct WS_ITEM{
+   warm_start_desc * ws;
+   struct WS_ITEM * next;
+   double gamma;
+}ws_item;
 #endif
