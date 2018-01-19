@@ -36,23 +36,34 @@ int main(int argc, char **argv)
 #else
 
 #include "symphony.h"
-  
+
 int main(int argc, char **argv)
-{    
-     
-   sym_environment *env = sym_open_environment();   
-   sym_parse_command_line(env, argc, argv);   
+{
+
+   sym_environment *env = sym_open_environment();
+   sym_parse_command_line(env, argc, argv);
    sym_load_problem(env);
 
    sym_set_obj2_coeff(env, 1, -1);
 
    sym_mc_solve(env);
+   int nsolutions;
+   sym_get_nsolutions(env, &nsolutions);
+   printf("nsolutions %d\n", nsolutions);
+   sym_solutions solutions;
+   for (int i =0; i < nsolutions; i++) {
+       sym_get_solution(env, i, &solutions);
+       printf("solition %d length %d\n", i, solutions.length);
+       for(int j = 0; j < solutions.length; j++) {
+           printf("\tindex: %d value %f\n", solutions.indices[j], solutions.values[j]);
+        }
+    }
 
    sym_close_environment(env);
-  
+
    return(0);
 
-}  
+}
 
 #endif
 
